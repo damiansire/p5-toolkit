@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/damiansire/draw-axis-p5js.git"
+    "url": "git+https://github.com/damiansire/p5-toolkit.git",
+    "directory": "packages/draw-axis"
   },
   "keywords": [
     "p5js",
@@ -22,7 +23,7 @@
   "author": "Damian Sire <damiansire@hotmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/damiansire/draw-axis-p5js/issues"
+    "url": "https://github.com/damiansire/p5-toolkit/issues"
   },
-  "homepage": "https://github.com/damiansire/draw-axis-p5js#readme"
+  "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/draw-axis#readme"
 }
