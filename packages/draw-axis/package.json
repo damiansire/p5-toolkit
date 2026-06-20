@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "package for drawing coordinate axes in p5.js",
   "main": "draw-axis-p5js.js",
+  "exports": {
+    ".": "./draw-axis-p5js.js"
+  },
+  "files": [
+    "draw-axis-p5js.js"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
