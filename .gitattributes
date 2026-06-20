@@ -1,0 +1,11 @@
+# Normaliza line endings: LF en el repo, auto en el working tree.
+* text=auto eol=lf
+
+# Binarios: que git no toque sus bytes.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
