@@ -1,8 +1,14 @@
 function drawAxis(p, step = 100) {
-    for (let indexY = 0; indexY <= p.height; indexY += step) {
-        for (let indexX = 0; indexX <= p.width; indexX += step) {
-            drawPoint(p, indexX, indexY);
-        }
+    // X axis (horizontal) and Y axis (vertical) through the origin.
+    p.strokeWeight(1);
+    p.line(0, 0, p.width, 0);
+    p.line(0, 0, 0, p.height);
+    // Tick labels along each axis.
+    for (let indexX = 0; indexX <= p.width; indexX += step) {
+        drawPoint(p, indexX, 0);
+    }
+    for (let indexY = step; indexY <= p.height; indexY += step) {
+        drawPoint(p, 0, indexY);
     }
 }
 
