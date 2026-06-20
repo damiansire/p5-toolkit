@@ -21,7 +21,7 @@
     "processingJs"
   ],
   "author": "Damian Sire <damiansire@hotmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/damiansire/p5-toolkit/issues"
   },
