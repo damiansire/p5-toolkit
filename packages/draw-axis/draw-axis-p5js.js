@@ -1,14 +1,16 @@
-function drawAxis() {
-    for (let indexY = 0; indexY <= height; indexY += 100) {
-        for (let indexX = 0; indexX <= width; indexX += 100) {
-            drawPoint(indexX, indexY);
-        };
+function drawAxis(p, step = 100) {
+    for (let indexY = 0; indexY <= p.height; indexY += step) {
+        for (let indexX = 0; indexX <= p.width; indexX += step) {
+            drawPoint(p, indexX, indexY);
+        }
     }
 }
 
-function drawPoint(x, y) {
-    strokeWeight(8);
-    point(x, y);
-    textSize(15);
-    text(`(${x},${y})`, x, y + 18);
+function drawPoint(p, x, y) {
+    p.strokeWeight(8);
+    p.point(x, y);
+    p.textSize(15);
+    p.text(`(${x},${y})`, x, y + 18);
 }
+
+module.exports = { drawAxis, drawPoint };
