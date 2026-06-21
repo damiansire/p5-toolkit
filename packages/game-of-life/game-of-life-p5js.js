@@ -10,7 +10,7 @@ function createGrid(cols, rows, fill = 0) {
     // A grid with no cells would make `step` a no-op and silently draw nothing.
     // Reject the degenerate size so the caller notices the mistake.
     if (!(cols > 0) || !(rows > 0)) {
-        throw new RangeError(`cols y rows deben ser > 0, se recibió ${cols}×${rows}`);
+        throw new RangeError(`cols and rows must be > 0, received ${cols}×${rows}`);
     }
     return Array.from({ length: rows }, () => new Array(cols).fill(fill));
 }
@@ -52,18 +52,30 @@ function countNeighbors(grid, x, y) {
 function step(grid, rule = { birth: [3], survival: [2, 3] }) {
     const rows = grid.length;
     const cols = grid[0].length;
-    const birth = new Set(rule.birth);
-    const survival = new Set(rule.survival);
+    // A neighbour count is always 0–8, so the rule fits in two fixed-size
+    // boolean tables. Building these once per call (instead of two `Set`s plus a
+    // `.has` per cell) keeps the per-frame allocation flat for big grids.
+    const birth = ruleLookup(rule.birth);
+    const survival = ruleLookup(rule.survival);
     const next = createGrid(cols, rows);
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
             const neighbors = countNeighbors(grid, x, y);
-            next[y][x] = grid[y][x]
-                ? (survival.has(neighbors) ? 1 : 0)
-                : (birth.has(neighbors) ? 1 : 0);
+            next[y][x] = grid[y][x] ? survival[neighbors] : birth[neighbors];
         }
     }
     return next;
+}
+
+// Turns a B/S digit list into a length-9 lookup (index = neighbour count,
+// value = 1 if that count keeps/makes a cell alive, else 0). Counts outside
+// 0–8 are impossible in an 8-neighbourhood, so they're simply absent.
+function ruleLookup(counts) {
+    const table = new Array(9).fill(0);
+    for (const n of counts) {
+        if (n >= 0 && n <= 8) table[n] = 1;
+    }
+    return table;
 }
 
 // Parses a rulestring like "B3/S23" (or "B36/S23") into `{ birth, survival }`
@@ -71,7 +83,7 @@ function step(grid, rule = { birth: [3], survival: [2, 3] }) {
 function parseRule(rulestring) {
     const match = /^B(\d*)\/S(\d*)$/i.exec(rulestring.trim());
     if (!match) {
-        throw new SyntaxError(`rulestring inválida: "${rulestring}" (se esperaba algo como "B3/S23")`);
+        throw new SyntaxError(`invalid rulestring: "${rulestring}" (expected something like "B3/S23")`);
     }
     const toDigits = (s) => s.split("").map(Number);
     return { birth: toDigits(match[1]), survival: toDigits(match[2]) };
