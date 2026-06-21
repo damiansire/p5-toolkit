@@ -14,27 +14,39 @@ function rotatePoint(x, y, angle) {
     return { x: x * cos - y * sin, y: x * sin + y * cos };
 }
 
+// The single source of truth for the radial layout: validates `slices` once and
+// returns one descriptor per replicated copy — `{ angle, mirror }`. Both the
+// pure point math (`symmetryPoints`) and the drawing layer (`drawMandala`)
+// iterate this list, so the angular step and the mirror semantics are defined in
+// exactly one place.
+function sliceAngles(slices, mirror = false) {
+    // 0 or negative slices have no rotational symmetry to speak of and would
+    // divide by zero below. Reject the degenerate input.
+    if (!(slices > 0) || !Number.isInteger(slices)) {
+        throw new RangeError(`slices must be an integer > 0, received ${slices}`);
+    }
+    const step = (Math.PI * 2) / slices;
+    const result = [];
+    for (let i = 0; i < slices; i++) {
+        const angle = step * i;
+        result.push({ angle, mirror: false });
+        if (mirror) {
+            // Each slice also gets a reflected twin.
+            result.push({ angle, mirror: true });
+        }
+    }
+    return result;
+}
+
 // Given one point relative to the centre, returns every replicated copy for a
 // mandala with `slices` rotational folds. With `mirror`, each slice also gets a
 // reflected twin (reflection across the x-axis before rotating), doubling the
 // symmetry the way kaleidoscopes do.
 function symmetryPoints(x, y, slices, mirror = false) {
-    // 0 or negative slices have no rotational symmetry to speak of and would
-    // divide by zero below. Reject the degenerate input.
-    if (!(slices > 0) || !Number.isInteger(slices)) {
-        throw new RangeError(`slices debe ser un entero > 0, se recibió ${slices}`);
-    }
-    const step = (Math.PI * 2) / slices;
-    const points = [];
-    for (let i = 0; i < slices; i++) {
-        const angle = step * i;
-        points.push(rotatePoint(x, y, angle));
-        if (mirror) {
-            // Reflect across the x-axis, then rotate into this slice.
-            points.push(rotatePoint(x, -y, angle));
-        }
-    }
-    return points;
+    return sliceAngles(slices, mirror).map((slice) =>
+        // A mirrored twin reflects across the x-axis (y -> -y) before rotating.
+        rotatePoint(x, slice.mirror ? -y : y, slice.angle)
+    );
 }
 
 // Replicates a whole list of points (a "motif" relative to the centre) across
@@ -56,23 +68,22 @@ function replicateMotif(motif, slices, mirror = false) {
 // `mirror`, every other call is drawn flipped, so the wedge tiles seamlessly.
 function drawMandala(p, wedgeFn, opts = {}) {
     const { cx = p.width / 2, cy = p.height / 2, slices = 12, mirror = false } = opts;
-    if (!(slices > 0) || !Number.isInteger(slices)) {
-        throw new RangeError(`slices debe ser un entero > 0, se recibió ${slices}`);
-    }
-    const step = (Math.PI * 2) / slices;
+    // Reuse the pure layout so the angular step and the mirror live in one place.
+    const layout = sliceAngles(slices, mirror);
     p.push();
     p.translate(cx, cy);
-    for (let i = 0; i < slices; i++) {
+    let sliceIndex = 0;
+    for (const slice of layout) {
         p.push();
-        p.rotate(step * i);
-        wedgeFn(p, i);
+        p.rotate(slice.angle);
+        if (slice.mirror) {
+            p.scale(1, -1); // reflected twin — matches symmetryPoints' y -> -y
+        }
+        wedgeFn(p, sliceIndex);
         p.pop();
-        if (mirror) {
-            p.push();
-            p.rotate(step * i);
-            p.scale(1, -1); // reflected twin
-            wedgeFn(p, i);
-            p.pop();
+        // Advance the slice index once per rotational fold (mirror twins share it).
+        if (!mirror || slice.mirror) {
+            sliceIndex++;
         }
     }
     p.pop();
@@ -93,6 +104,7 @@ function drawMotif(p, motif, opts = {}) {
 
 module.exports = {
     rotatePoint,
+    sliceAngles,
     symmetryPoints,
     replicateMotif,
     drawMandala,
