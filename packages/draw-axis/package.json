@@ -40,7 +40,7 @@
     "processing",
     "processingJs"
   ],
-  "author": "Damian Sire <damiansire@hotmail.com>",
+  "author": "Damian Sire <damiansire@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
     "p5": "^1.0.0"
