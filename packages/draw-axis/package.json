@@ -4,6 +4,7 @@
   "description": "package for drawing coordinate axes in p5.js",
   "main": "draw-axis-p5js.js",
   "type": "commonjs",
+  "sideEffects": false,
   "exports": {
     ".": {
       "require": "./draw-axis-p5js.js",
@@ -17,7 +18,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "engines": {
     "node": ">=18"
