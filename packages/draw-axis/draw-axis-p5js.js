@@ -1,6 +1,11 @@
 // Pure coordinate generation, decoupled from drawing and from p5 globals so it
 // can be tested without a canvas.
 function axisPoints(width, height, step = 100) {
+    // step<=0 nunca avanza los bucles hacia el borde -> loop infinito que
+    // cuelga el sketch. Rechazamos la entrada degenerada en vez de colgar.
+    if (!(step > 0)) {
+        throw new RangeError(`step debe ser > 0, se recibió ${step}`);
+    }
     const points = [];
     for (let x = 0; x <= width; x += step) {
         points.push([x, 0]);
