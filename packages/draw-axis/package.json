@@ -3,17 +3,28 @@
   "version": "1.0.0",
   "description": "package for drawing coordinate axes in p5.js",
   "main": "draw-axis-p5js.js",
+  "type": "commonjs",
   "exports": {
     ".": {
       "require": "./draw-axis-p5js.js",
       "default": "./draw-axis-p5js.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
-    "draw-axis-p5js.js"
+    "draw-axis-p5js.js",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "prepublishOnly": "node --test"
   },
   "repository": {
     "type": "git",
