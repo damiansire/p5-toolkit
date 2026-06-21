@@ -4,6 +4,7 @@
   "description": "L-systems and turtle-graphics fractal plants for p5.js",
   "main": "l-system-p5js.js",
   "type": "commonjs",
+  "sideEffects": false,
   "exports": {
     ".": {
       "require": "./l-system-p5js.js",
@@ -17,7 +18,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "engines": {
     "node": ">=18"
