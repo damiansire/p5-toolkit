@@ -14,17 +14,20 @@ function expand(axiom, rules, generations) {
     // Negative or fractional generations have no meaning and would either skip
     // the loop silently or never terminate. Reject the degenerate input.
     if (!Number.isInteger(generations) || generations < 0) {
-        throw new RangeError(`generations debe ser un entero >= 0, se recibió ${generations}`);
+        throw new RangeError(`generations must be an integer >= 0, received ${generations}`);
     }
     let current = axiom;
     for (let gen = 0; gen < generations; gen++) {
-        let next = "";
+        // Push each replacement into an array and join once: string `+=` in a
+        // loop materialises a fresh (and growing) string per symbol, which is
+        // quadratic for the exponential presets (e.g. plant's F -> FF).
+        const parts = [];
         for (const symbol of current) {
-            next += Object.prototype.hasOwnProperty.call(rules, symbol)
-                ? rules[symbol]
-                : symbol;
+            parts.push(
+                Object.prototype.hasOwnProperty.call(rules, symbol) ? rules[symbol] : symbol
+            );
         }
-        current = next;
+        current = parts.join("");
     }
     return current;
 }

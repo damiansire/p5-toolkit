@@ -1,9 +1,11 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { fakeP5 } = require("../../test/fake-p5.js");
 const {
     expand,
     turtleSegments,
     generate,
+    drawLSystem,
     PRESETS,
 } = require("./l-system-p5js.js");
 
@@ -66,4 +68,38 @@ test("los presets exponen axiom, rules y angle", () => {
         assert.equal(typeof p.rules, "object");
         assert.equal(typeof p.angle, "number");
     }
+});
+
+test("el preset plant (branching anidado) genera segmentos sanos", () => {
+    const segs = generate(PRESETS.plant, 2, { length: 5 });
+    assert.ok(segs.length > 0, "debe producir al menos un segmento");
+    // Ninguna coordenada NaN/Infinita: el stack [ ] quedó balanceado.
+    for (const [x1, y1, x2, y2] of segs) {
+        for (const v of [x1, y1, x2, y2]) {
+            assert.ok(Number.isFinite(v), `coordenada inválida: ${v}`);
+        }
+    }
+});
+
+test("expand del plant balancea los corchetes de branching", () => {
+    const out = expand(PRESETS.plant.axiom, PRESETS.plant.rules, 3);
+    let depth = 0;
+    let minDepth = 0;
+    for (const ch of out) {
+        if (ch === "[") depth++;
+        else if (ch === "]") {
+            depth--;
+            if (depth < minDepth) minDepth = depth;
+        }
+    }
+    assert.equal(depth, 0, "cada [ tiene su ]");
+    assert.equal(minDepth, 0, "nunca cierra de más");
+});
+
+test("drawLSystem balancea push/pop y dibuja una línea por segmento", () => {
+    const p = fakeP5();
+    const segs = generate(PRESETS.dragon, 2, { length: 10 });
+    drawLSystem(p, segs);
+    assert.ok(p.balanced());
+    assert.equal(p.count("line"), segs.length);
 });
