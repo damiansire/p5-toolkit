@@ -1,9 +1,11 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { fakeP5 } = require("../../test/fake-p5.js");
 const {
     createBoid,
     computeSteering,
     flock,
+    drawBoids,
 } = require("./boids-p5js.js");
 
 test("createBoid arma pos, vel y acc", () => {
@@ -81,4 +83,49 @@ test("flock acota la velocidad a maxSpeed", () => {
     const next = flock(boids, { maxSpeed: 4, width: 1000, height: 1000 });
     const speed = Math.hypot(next[0].vel.x, next[0].vel.y);
     assert.ok(speed <= 4 + 1e-9);
+});
+
+test("drawBoids balancea push/pop y no fuga estilo global", () => {
+    const p = fakeP5();
+    drawBoids(p, [createBoid(10, 10, 1, 0), createBoid(20, 20, 0, 1)], 6);
+    assert.ok(p.balanced(), "push/pop deben quedar balanceados");
+    assert.deepEqual(p.styleOutsidePush, []);
+    // Un triángulo por boid.
+    assert.equal(p.count("triangle"), 2);
+});
+
+test("la grilla espacial da el mismo resultado que el barrido O(n²)", () => {
+    // Bandada densa repartida por el canvas: si la partición espacial perdiera
+    // un vecino legítimo, el resultado divergiría del barrido completo.
+    const opts = { width: 200, height: 200, perception: 50, separationDist: 25 };
+    const boids = [];
+    let seed = 1;
+    const rng = () => {
+        seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+        return seed / 0x7fffffff;
+    };
+    for (let i = 0; i < 60; i++) {
+        boids.push(createBoid(rng() * 200, rng() * 200, rng() * 4 - 2, rng() * 4 - 2));
+    }
+    // Resultado con la grilla (flock) vs. el barrido completo boid por boid.
+    const viaGrid = flock(boids, opts);
+    const viaFull = boids.map((b) => {
+        const force = computeSteering(b, boids, opts); // neighbours = todos
+        const vel = (() => {
+            const v = { x: b.vel.x + force.x, y: b.vel.y + force.y };
+            const m = Math.hypot(v.x, v.y);
+            return m > 4 ? { x: (v.x / m) * 4, y: (v.y / m) * 4 } : v;
+        })();
+        let x = b.pos.x + vel.x;
+        let y = b.pos.y + vel.y;
+        x = ((x % 200) + 200) % 200;
+        y = ((y % 200) + 200) % 200;
+        return { x, y, vx: vel.x, vy: vel.y };
+    });
+    for (let i = 0; i < boids.length; i++) {
+        assert.ok(Math.abs(viaGrid[i].pos.x - viaFull[i].x) < 1e-9, `pos.x boid ${i}`);
+        assert.ok(Math.abs(viaGrid[i].pos.y - viaFull[i].y) < 1e-9, `pos.y boid ${i}`);
+        assert.ok(Math.abs(viaGrid[i].vel.x - viaFull[i].vx) < 1e-9, `vel.x boid ${i}`);
+        assert.ok(Math.abs(viaGrid[i].vel.y - viaFull[i].vy) < 1e-9, `vel.y boid ${i}`);
+    }
 });

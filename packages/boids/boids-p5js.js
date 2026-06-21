@@ -29,10 +29,14 @@ function setMag(v, len) {
 function limit(v, max) {
     return mag(v) > max ? setMag(v, max) : v;
 }
-function dist(a, b) {
-    return Math.hypot(a.x - b.x, a.y - b.y);
+// Canonical toroidal wrap: folds `v` back into [0, size). `size <= 0` has no
+// torus to wrap onto and `% 0` is NaN, so the value is returned untouched.
+// (This idiom is duplicated verbatim in flow-field-p5js.js — the packages stay
+// independent on purpose, so each keeps its own copy.)
+function wrap(v, size) {
+    if (!(size > 0)) return v;
+    return ((v % size) + size) % size;
 }
-
 // Creates a boid at `(x, y)` with an initial velocity. Velocity defaults to zero
 // so a deterministic test can set it explicitly.
 function createBoid(x, y, vx = 0, vy = 0) {
@@ -42,7 +46,12 @@ function createBoid(x, y, vx = 0, vy = 0) {
 // Computes the steering acceleration for one boid given its neighbours. Each
 // rule only considers boids within its radius, which is what keeps flocking
 // local. Returns the combined acceleration vector — the caller integrates it.
-function computeSteering(boid, boids, opts = {}) {
+//
+// `neighbours` defaults to the whole flock (the simple O(n) scan), but `flock`
+// passes only the boids in the nearby grid cells so the per-tick cost stays
+// roughly linear instead of O(n²). The accumulators are mutated in place to
+// avoid allocating tens of thousands of throwaway vectors per frame.
+function computeSteering(boid, boids, opts = {}, neighbours = boids) {
     const {
         perception = 50,
         separationDist = 25,
@@ -53,29 +62,42 @@ function computeSteering(boid, boids, opts = {}) {
         cohesionWeight = 1.0,
     } = opts;
 
-    let sepSum = { x: 0, y: 0 };
-    let aliSum = { x: 0, y: 0 };
-    let cohSum = { x: 0, y: 0 };
+    let sepX = 0;
+    let sepY = 0;
+    let aliX = 0;
+    let aliY = 0;
+    let cohX = 0;
+    let cohY = 0;
     let sepCount = 0;
     let aliCount = 0;
     let cohCount = 0;
 
-    for (const other of boids) {
+    for (const other of neighbours) {
         if (other === boid) continue;
-        const d = dist(boid.pos, other.pos);
+        const dx = boid.pos.x - other.pos.x;
+        const dy = boid.pos.y - other.pos.y;
+        const d = Math.hypot(dx, dy);
         if (d > 0 && d < separationDist) {
-            // Push away, weighted by closeness (closer => stronger).
-            const away = scale(setMag(sub(boid.pos, other.pos), 1), 1 / d);
-            sepSum = add(sepSum, away);
+            // Push away, weighted by closeness (closer => stronger): a unit
+            // away-vector scaled by 1/d, all on scalars (no temp objects).
+            const inv = 1 / (d * d);
+            sepX += dx * inv;
+            sepY += dy * inv;
             sepCount++;
         }
         if (d > 0 && d < perception) {
-            aliSum = add(aliSum, other.vel);
+            aliX += other.vel.x;
+            aliY += other.vel.y;
             aliCount++;
-            cohSum = add(cohSum, other.pos);
+            cohX += other.pos.x;
+            cohY += other.pos.y;
             cohCount++;
         }
     }
+
+    const sepSum = { x: sepX, y: sepY };
+    const aliSum = { x: aliX, y: aliY };
+    const cohSum = { x: cohX, y: cohY };
 
     let steer = { x: 0, y: 0 };
 
@@ -100,18 +122,65 @@ function computeSteering(boid, boids, opts = {}) {
     return steer;
 }
 
+// Builds a uniform spatial-hash grid over the flock so each boid only has to
+// look at the boids in its own cell and the 8 surrounding ones, instead of the
+// whole flock. The cell size is the largest neighbourhood radius any rule uses,
+// so every boid that can influence another always lands in an adjacent cell.
+function buildSpatialGrid(boids, cellSize) {
+    const grid = new Map();
+    const key = (cx, cy) => cx + "," + cy;
+    for (const b of boids) {
+        const cx = Math.floor(b.pos.x / cellSize);
+        const cy = Math.floor(b.pos.y / cellSize);
+        const k = key(cx, cy);
+        let cell = grid.get(k);
+        if (cell === undefined) {
+            cell = [];
+            grid.set(k, cell);
+        }
+        cell.push(b);
+    }
+    return { grid, cellSize, key };
+}
+
+// Returns the boids in the 3×3 block of cells around `boid` — its candidate
+// neighbours for steering. Always includes the boid's own cell.
+function neighboursOf(boid, { grid, cellSize, key }) {
+    const cx = Math.floor(boid.pos.x / cellSize);
+    const cy = Math.floor(boid.pos.y / cellSize);
+    const out = [];
+    for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+            const cell = grid.get(key(cx + dx, cy + dy));
+            if (cell !== undefined) {
+                for (const other of cell) out.push(other);
+            }
+        }
+    }
+    return out;
+}
+
 // Advances the whole flock one tick: compute every steering force from the same
 // snapshot, then integrate position/velocity and wrap around the canvas edges.
-// Returns a fresh array of boids (the input flock is not mutated).
+// Returns a fresh array of boids (the input flock is not mutated). Uses a
+// spatial-hash grid so the per-tick cost is ~O(n) instead of O(n²).
 function flock(boids, opts = {}) {
-    const { maxSpeed = 4, width = 800, height = 600 } = opts;
-    const forces = boids.map((b) => computeSteering(b, boids, opts));
+    const {
+        maxSpeed = 4,
+        width = 800,
+        height = 600,
+        perception = 50,
+        separationDist = 25,
+    } = opts;
+    // Cell = the largest radius any rule reads, so neighbours never fall outside
+    // the 3×3 block we query. Guard against a non-positive size.
+    const cellSize = Math.max(1, perception, separationDist);
+    const spatial = buildSpatialGrid(boids, cellSize);
+    const forces = boids.map((b) => computeSteering(b, boids, opts, neighboursOf(b, spatial)));
     return boids.map((b, i) => {
         const vel = limit(add(b.vel, forces[i]), maxSpeed);
-        let x = b.pos.x + vel.x;
-        let y = b.pos.y + vel.y;
-        x = ((x % width) + width) % width;
-        y = ((y % height) + height) % height;
+        const x = wrap(b.pos.x + vel.x, width);
+        const y = wrap(b.pos.y + vel.y, height);
         return { pos: { x, y }, vel, acc: { x: 0, y: 0 } };
     });
 }
