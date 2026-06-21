@@ -1,11 +1,13 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { fakeP5 } = require("../../test/fake-p5.js");
 const {
     createGrid,
     randomGrid,
     countNeighbors,
     step,
     parseRule,
+    drawGrid,
 } = require("./game-of-life-p5js.js");
 
 test("createGrid arma una grilla rows×cols de ceros", () => {
@@ -76,4 +78,29 @@ test("parseRule entiende B3/S23 y variantes", () => {
 
 test("parseRule rechaza strings inválidas", () => {
     assert.throws(() => parseRule("vivir y dejar morir"), SyntaxError);
+});
+
+test("HighLife (B36/S23) nace con 6 vecinos donde Life no", () => {
+    // Lookup-table regression: un patrón con exactamente 6 vecinos vivos.
+    // Centro muerto rodeado de 6 vivos -> nace en HighLife, sigue muerto en Life.
+    const grid = createGrid(3, 3);
+    grid[0][0] = grid[0][1] = grid[0][2] = 1;
+    grid[2][0] = grid[2][1] = grid[2][2] = 1;
+    // countNeighbors del centro (1,1) ve los 6 vivos (con wrap no agrega más
+    // porque la fila del medio está vacía y el wrap vertical repite las filas).
+    const life = step(grid, { birth: [3], survival: [2, 3] });
+    const highlife = step(grid, { birth: [3, 6], survival: [2, 3] });
+    assert.equal(countNeighbors(grid, 1, 1), 6);
+    assert.equal(life[1][1], 0, "Life no nace con 6 vecinos");
+    assert.equal(highlife[1][1], 1, "HighLife sí nace con 6 vecinos");
+});
+
+test("drawGrid balancea push/pop y dibuja solo las celdas vivas", () => {
+    const p = fakeP5({ width: 100, height: 100 });
+    const grid = createGrid(3, 3);
+    grid[0][0] = grid[1][1] = grid[2][2] = 1; // 3 vivas
+    drawGrid(p, grid, 10);
+    assert.ok(p.balanced());
+    assert.equal(p.count("rect"), 3);
+    assert.deepEqual(p.styleOutsidePush, []);
 });
