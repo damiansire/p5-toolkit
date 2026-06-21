@@ -4,15 +4,15 @@ Creative-coding utilities for [p5.js](https://p5js.org/), organized as an npm-wo
 
 ## Packages
 
-| Package | npm | What it does |
-|---|---|---|
-| [`draw-axis`](packages/draw-axis) | [npm](https://www.npmjs.com/package/draw-axis-p5js) | Draw coordinate axes in p5.js sketches. |
-| [`flow-field`](packages/flow-field) | [npm](https://www.npmjs.com/package/flow-field-p5js) | Perlin-noise flow fields + particle advection. |
-| [`l-system`](packages/l-system) | [npm](https://www.npmjs.com/package/l-system-p5js) | L-systems and turtle-graphics fractal plants. |
-| [`game-of-life`](packages/game-of-life) | [npm](https://www.npmjs.com/package/game-of-life-p5js) | Conway's Game of Life and B/S cellular automata. |
-| [`boids`](packages/boids) | [npm](https://www.npmjs.com/package/boids-p5js) | Boids flocking (separation, alignment, cohesion). |
-| [`color-palette`](packages/color-palette) | [npm](https://www.npmjs.com/package/color-palette-p5js) | Generative palettes from color-theory harmonies. |
-| [`mandala`](packages/mandala) | [npm](https://www.npmjs.com/package/mandala-p5js) | Radial-symmetry mandala / kaleidoscope patterns. |
+| Package                                   | npm                                                     | What it does                                      |
+| ----------------------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
+| [`draw-axis`](packages/draw-axis)         | [npm](https://www.npmjs.com/package/draw-axis-p5js)     | Draw coordinate axes in p5.js sketches.           |
+| [`flow-field`](packages/flow-field)       | [npm](https://www.npmjs.com/package/flow-field-p5js)    | Perlin-noise flow fields + particle advection.    |
+| [`l-system`](packages/l-system)           | [npm](https://www.npmjs.com/package/l-system-p5js)      | L-systems and turtle-graphics fractal plants.     |
+| [`game-of-life`](packages/game-of-life)   | [npm](https://www.npmjs.com/package/game-of-life-p5js)  | Conway's Game of Life and B/S cellular automata.  |
+| [`boids`](packages/boids)                 | [npm](https://www.npmjs.com/package/boids-p5js)         | Boids flocking (separation, alignment, cohesion). |
+| [`color-palette`](packages/color-palette) | [npm](https://www.npmjs.com/package/color-palette-p5js) | Generative palettes from color-theory harmonies.  |
+| [`mandala`](packages/mandala)             | [npm](https://www.npmjs.com/package/mandala-p5js)       | Radial-symmetry mandala / kaleidoscope patterns.  |
 
 ## Conventions
 

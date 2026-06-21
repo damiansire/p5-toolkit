@@ -45,7 +45,7 @@ function sliceAngles(slices, mirror = false) {
 function symmetryPoints(x, y, slices, mirror = false) {
     return sliceAngles(slices, mirror).map((slice) =>
         // A mirrored twin reflects across the x-axis (y -> -y) before rotating.
-        rotatePoint(x, slice.mirror ? -y : y, slice.angle)
+        rotatePoint(x, slice.mirror ? -y : y, slice.angle),
     );
 }
 

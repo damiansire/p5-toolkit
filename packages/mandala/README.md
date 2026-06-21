@@ -27,33 +27,41 @@ You draw a single wedge; the symmetry is handled for you. Inside `wedgeFn` the
 canvas is already translated to the centre and rotated into the current slice.
 
 ```js
-const p5 = require("p5");
-const { drawMandala } = require("mandala-p5js");
+const p5 = require('p5');
+const { drawMandala } = require('mandala-p5js');
 
 new p5((p) => {
-  p.setup = () => {
-    p.createCanvas(600, 600);
-    p.background(10);
-    p.stroke(255, 120);
-    p.noFill();
+    p.setup = () => {
+        p.createCanvas(600, 600);
+        p.background(10);
+        p.stroke(255, 120);
+        p.noFill();
 
-    drawMandala(p, (pp) => {
-      // One wedge, drawn outward from the centre. It gets replicated.
-      pp.line(0, 0, 0, -240);
-      pp.circle(0, -160, 60);
-      pp.circle(0, -100, 24);
-    }, { slices: 16, mirror: true });
-  };
+        drawMandala(
+            p,
+            (pp) => {
+                // One wedge, drawn outward from the centre. It gets replicated.
+                pp.line(0, 0, 0, -240);
+                pp.circle(0, -160, 60);
+                pp.circle(0, -100, 24);
+            },
+            { slices: 16, mirror: true },
+        );
+    };
 });
 ```
 
 For dot / scatter mandalas, replicate a motif of points directly:
 
 ```js
-const { drawMotif } = require("mandala-p5js");
+const { drawMotif } = require('mandala-p5js');
 
 // A motif is a list of [x, y] points relative to the centre.
-const motif = [[40, 0], [80, -20], [120, 10]];
+const motif = [
+    [40, 0],
+    [80, -20],
+    [120, 10],
+];
 drawMotif(p, motif, { slices: 12, mirror: true, dotSize: 5 });
 ```
 
@@ -82,7 +90,7 @@ and draws them as dots. Same `opts` as `drawMandala`, plus `dotSize`.
 - `rotatePoint(x, y, angle)` — rotates a point around the origin.
 
 ```js
-const { symmetryPoints } = require("mandala-p5js");
+const { symmetryPoints } = require('mandala-p5js');
 
 symmetryPoints(10, 0, 4);
 // => [{x:10,y:0}, {x:0,y:10}, {x:-10,y:0}, {x:0,y:-10}]

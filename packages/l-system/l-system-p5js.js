@@ -24,10 +24,10 @@ function expand(axiom, rules, generations) {
         const parts = [];
         for (const symbol of current) {
             parts.push(
-                Object.prototype.hasOwnProperty.call(rules, symbol) ? rules[symbol] : symbol
+                Object.prototype.hasOwnProperty.call(rules, symbol) ? rules[symbol] : symbol,
             );
         }
-        current = parts.join("");
+        current = parts.join('');
     }
     return current;
 }
@@ -56,15 +56,15 @@ function turtleSegments(commands, opts = {}) {
     let state = { x, y, heading };
     for (const command of commands) {
         switch (command) {
-            case "F":
-            case "G": {
+            case 'F':
+            case 'G': {
                 const nx = state.x + Math.cos(state.heading * toRad) * length;
                 const ny = state.y + Math.sin(state.heading * toRad) * length;
                 segments.push([state.x, state.y, nx, ny]);
                 state = { ...state, x: nx, y: ny };
                 break;
             }
-            case "f": {
+            case 'f': {
                 state = {
                     ...state,
                     x: state.x + Math.cos(state.heading * toRad) * length,
@@ -72,16 +72,16 @@ function turtleSegments(commands, opts = {}) {
                 };
                 break;
             }
-            case "+":
+            case '+':
                 state = { ...state, heading: state.heading + angle };
                 break;
-            case "-":
+            case '-':
                 state = { ...state, heading: state.heading - angle };
                 break;
-            case "[":
+            case '[':
                 stack.push({ ...state });
                 break;
-            case "]":
+            case ']':
                 // A stray `]` with nothing pushed would pop `undefined` and
                 // corrupt the turtle. Ignore it instead of crashing the sketch.
                 if (stack.length > 0) {
@@ -98,10 +98,10 @@ function turtleSegments(commands, opts = {}) {
 // A few ready-to-use presets so a sketch can grow a plant in one line.
 // Each carries its own default branching `angle`.
 const PRESETS = {
-    plant: { axiom: "X", rules: { X: "F+[[X]-X]-F[-FX]+X", F: "FF" }, angle: 25 },
-    kochCurve: { axiom: "F", rules: { F: "F+F-F-F+F" }, angle: 90 },
-    sierpinski: { axiom: "F-G-G", rules: { F: "F-G+F+G-F", G: "GG" }, angle: 120 },
-    dragon: { axiom: "F", rules: { F: "F+G", G: "F-G" }, angle: 90 },
+    plant: { axiom: 'X', rules: { X: 'F+[[X]-X]-F[-FX]+X', F: 'FF' }, angle: 25 },
+    kochCurve: { axiom: 'F', rules: { F: 'F+F-F-F+F' }, angle: 90 },
+    sierpinski: { axiom: 'F-G-G', rules: { F: 'F-G+F+G-F', G: 'GG' }, angle: 120 },
+    dragon: { axiom: 'F', rules: { F: 'F+G', G: 'F-G' }, angle: 90 },
 };
 
 // Expands a preset (or any `{ axiom, rules, angle }`) and returns the turtle

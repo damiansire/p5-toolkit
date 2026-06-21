@@ -24,34 +24,34 @@ npm install p5
 ## Usage (instance mode)
 
 ```js
-const p5 = require("p5");
-const { randomGrid, step, drawGrid } = require("game-of-life-p5js");
+const p5 = require('p5');
+const { randomGrid, step, drawGrid } = require('game-of-life-p5js');
 
 new p5((p) => {
-  const cell = 8;
-  let grid;
+    const cell = 8;
+    let grid;
 
-  p.setup = () => {
-    p.createCanvas(640, 480);
-    p.frameRate(12);
-    grid = randomGrid(p.width / cell, p.height / cell, 0.3, () => p.random());
-  };
+    p.setup = () => {
+        p.createCanvas(640, 480);
+        p.frameRate(12);
+        grid = randomGrid(p.width / cell, p.height / cell, 0.3, () => p.random());
+    };
 
-  p.draw = () => {
-    p.background(10);
-    p.fill(0, 255, 140);
-    drawGrid(p, grid, cell);
-    grid = step(grid); // advance one generation
-  };
+    p.draw = () => {
+        p.background(10);
+        p.fill(0, 255, 140);
+        drawGrid(p, grid, cell);
+        grid = step(grid); // advance one generation
+    };
 });
 ```
 
 Run a variant by passing a different B/S rule:
 
 ```js
-const { step, parseRule } = require("game-of-life-p5js");
+const { step, parseRule } = require('game-of-life-p5js');
 
-grid = step(grid, parseRule("B36/S23")); // HighLife (self-replicating patterns)
+grid = step(grid, parseRule('B36/S23')); // HighLife (self-replicating patterns)
 ```
 
 ## API
@@ -82,7 +82,7 @@ to the caller, so fades and trails are possible.
 - `countNeighbors(grid, x, y)` — live neighbours in the wrapped 8-neighbourhood.
 
 ```js
-const { createGrid, step } = require("game-of-life-p5js");
+const { createGrid, step } = require('game-of-life-p5js');
 
 let grid = createGrid(5, 5);
 grid[2][1] = grid[2][2] = grid[2][3] = 1; // a blinker

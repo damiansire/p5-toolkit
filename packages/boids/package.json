@@ -1,57 +1,57 @@
 {
-  "name": "boids-p5js",
-  "version": "1.0.0",
-  "description": "Boids flocking simulation (separation, alignment, cohesion) for p5.js",
-  "main": "boids-p5js.js",
-  "type": "commonjs",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "require": "./boids-p5js.js",
-      "default": "./boids-p5js.js"
+    "name": "boids-p5js",
+    "version": "1.0.0",
+    "description": "Boids flocking simulation (separation, alignment, cohesion) for p5.js",
+    "main": "boids-p5js.js",
+    "type": "commonjs",
+    "sideEffects": false,
+    "exports": {
+        ".": {
+            "require": "./boids-p5js.js",
+            "default": "./boids-p5js.js"
+        },
+        "./package.json": "./package.json"
     },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "boids-p5js.js",
-    "README.md",
-    "LICENSE"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "scripts": {
-    "test": "node --test",
-    "prepublishOnly": "node --test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/damiansire/p5-toolkit.git",
-    "directory": "packages/boids"
-  },
-  "keywords": [
-    "p5js",
-    "p5.js",
-    "boids",
-    "flocking",
-    "swarm",
-    "reynolds",
-    "simulation",
-    "generative",
-    "creative-coding",
-    "processing"
-  ],
-  "author": "Damian Sire <damiansire@hotmail.com>",
-  "license": "MIT",
-  "peerDependencies": {
-    "p5": "^1.0.0"
-  },
-  "bugs": {
-    "url": "https://github.com/damiansire/p5-toolkit/issues"
-  },
-  "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/boids#readme"
+    "files": [
+        "boids-p5js.js",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "scripts": {
+        "test": "node --test",
+        "prepublishOnly": "node --test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/damiansire/p5-toolkit.git",
+        "directory": "packages/boids"
+    },
+    "keywords": [
+        "p5js",
+        "p5.js",
+        "boids",
+        "flocking",
+        "swarm",
+        "reynolds",
+        "simulation",
+        "generative",
+        "creative-coding",
+        "processing"
+    ],
+    "author": "Damian Sire <damiansire@hotmail.com>",
+    "license": "MIT",
+    "peerDependencies": {
+        "p5": "^1.0.0"
+    },
+    "bugs": {
+        "url": "https://github.com/damiansire/p5-toolkit/issues"
+    },
+    "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/boids#readme"
 }

@@ -21,18 +21,18 @@ npm install p5
 ## Usage (instance mode)
 
 ```js
-const p5 = require("p5");
-const { drawAxis } = require("draw-axis-p5js");
+const p5 = require('p5');
+const { drawAxis } = require('draw-axis-p5js');
 
 new p5((p) => {
-  p.setup = () => {
-    p.createCanvas(400, 400);
-  };
+    p.setup = () => {
+        p.createCanvas(400, 400);
+    };
 
-  p.draw = () => {
-    p.background(255);
-    drawAxis(p); // X and Y axes through the origin, with labeled points every 100px
-  };
+    p.draw = () => {
+        p.background(255);
+        drawAxis(p); // X and Y axes through the origin, with labeled points every 100px
+    };
 });
 ```
 
@@ -69,7 +69,7 @@ points along the X axis from `0` to `width`, and along the Y axis from `step` to
 - Returns `Array<[x, y]>`.
 
 ```js
-const { axisPoints } = require("draw-axis-p5js");
+const { axisPoints } = require('draw-axis-p5js');
 
 axisPoints(200, 200, 100);
 // => [[0, 0], [100, 0], [200, 0], [0, 100], [0, 200]]

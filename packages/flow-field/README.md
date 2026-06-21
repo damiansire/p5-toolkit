@@ -24,40 +24,40 @@ npm install p5
 ## Usage (instance mode)
 
 ```js
-const p5 = require("p5");
-const { buildFlowField, stepParticle } = require("flow-field-p5js");
+const p5 = require('p5');
+const { buildFlowField, stepParticle } = require('flow-field-p5js');
 
 new p5((p) => {
-  let field;
-  let particles;
+    let field;
+    let particles;
 
-  p.setup = () => {
-    p.createCanvas(600, 600);
-    p.background(10);
-    // `field` carries its own resolution/width/height, so stepParticle never
-    // needs you to repeat them.
-    field = buildFlowField(p, 20, { noiseScale: 0.08, turns: 1 });
-    particles = Array.from({ length: 800 }, () => ({
-      x: p.random(p.width),
-      y: p.random(p.height),
-    }));
-  };
+    p.setup = () => {
+        p.createCanvas(600, 600);
+        p.background(10);
+        // `field` carries its own resolution/width/height, so stepParticle never
+        // needs you to repeat them.
+        field = buildFlowField(p, 20, { noiseScale: 0.08, turns: 1 });
+        particles = Array.from({ length: 800 }, () => ({
+            x: p.random(p.width),
+            y: p.random(p.height),
+        }));
+    };
 
-  p.draw = () => {
-    p.stroke(255, 12);
-    for (let i = 0; i < particles.length; i++) {
-      const next = stepParticle(particles[i], field, { speed: 1.5 });
-      p.line(particles[i].x, particles[i].y, next.x, next.y);
-      particles[i] = next;
-    }
-  };
+    p.draw = () => {
+        p.stroke(255, 12);
+        for (let i = 0; i < particles.length; i++) {
+            const next = stepParticle(particles[i], field, { speed: 1.5 });
+            p.line(particles[i].x, particles[i].y, next.x, next.y);
+            particles[i] = next;
+        }
+    };
 });
 ```
 
 To preview the raw field while tuning it, draw the angle grid directly:
 
 ```js
-const { buildFlowField, drawFlowField } = require("flow-field-p5js");
+const { buildFlowField, drawFlowField } = require('flow-field-p5js');
 
 const field = buildFlowField(p, 20, { noiseScale: 0.08, turns: 2 });
 drawFlowField(p, field);
@@ -104,7 +104,7 @@ Draws the field as a grid of short line segments. `field` may be a field object
   pixel, clamped to the grid edges.
 
 ```js
-const { flowFieldAngles } = require("flow-field-p5js");
+const { flowFieldAngles } = require('flow-field-p5js');
 
 flowFieldAngles(2, 2, () => 0.5);
 // => [[Math.PI, Math.PI], [Math.PI, Math.PI]]
