@@ -4,6 +4,7 @@
   "description": "Radial-symmetry mandala and kaleidoscope patterns for p5.js",
   "main": "mandala-p5js.js",
   "type": "commonjs",
+  "sideEffects": false,
   "exports": {
     ".": {
       "require": "./mandala-p5js.js",
@@ -17,7 +18,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "engines": {
     "node": ">=18"

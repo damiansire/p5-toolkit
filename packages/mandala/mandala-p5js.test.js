@@ -1,9 +1,12 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { fakeP5 } = require("../../test/fake-p5.js");
 const {
     rotatePoint,
+    sliceAngles,
     symmetryPoints,
     replicateMotif,
+    drawMandala,
 } = require("./mandala-p5js.js");
 
 // Helper: compara puntos con tolerancia (rotaciones traen floats sucios).
@@ -58,4 +61,57 @@ test("replicateMotif replica cada punto del motivo en todas las slices", () => {
     assert.equal(out.length, 8);
     // Cada elemento es un par [x, y].
     assert.equal(out[0].length, 2);
+});
+
+test("sliceAngles es la fuente de verdad del paso angular y el mirror", () => {
+    const plain = sliceAngles(4);
+    assert.deepEqual(
+        plain.map((s) => s.angle),
+        [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2]
+    );
+    assert.ok(plain.every((s) => s.mirror === false));
+    // Con mirror, cada fold gana un gemelo reflejado.
+    const mirrored = sliceAngles(4, true);
+    assert.equal(mirrored.length, 8);
+    assert.deepEqual(
+        mirrored.map((s) => s.mirror),
+        [false, true, false, true, false, true, false, true]
+    );
+});
+
+test("sliceAngles rechaza slices inválidos (validación única)", () => {
+    assert.throws(() => sliceAngles(0), RangeError);
+    assert.throws(() => sliceAngles(-3), RangeError);
+    assert.throws(() => sliceAngles(2.5), RangeError);
+});
+
+test("drawMandala usa el mismo paso/mirror que symmetryPoints", () => {
+    // El render rota a los mismos ángulos que produce la capa pura, y el gemelo
+    // mirror (scale(1,-1)) coincide con la reflexión y -> -y de symmetryPoints.
+    const p = fakeP5();
+    const rotations = [];
+    let scaledTwins = 0;
+    p.rotate = (a) => {
+        rotations.push(a);
+        p.calls.push(["rotate", a]);
+    };
+    p.scale = (sx, sy) => {
+        if (sx === 1 && sy === -1) scaledTwins++;
+        p.calls.push(["scale", sx, sy]);
+    };
+    drawMandala(p, () => {}, { slices: 6, mirror: true });
+    assert.ok(p.balanced(), "push/pop deben balancear");
+    // Ángulos de rotación esperados de la capa pura (un par por fold con mirror).
+    const expected = sliceAngles(6, true).map((s) => s.angle);
+    assert.deepEqual(rotations, expected);
+    // Un gemelo reflejado por fold.
+    assert.equal(scaledTwins, 6);
+});
+
+test("drawMandala pasa un sliceIndex consecutivo por fold (no por gemelo)", () => {
+    const p = fakeP5();
+    const seen = [];
+    drawMandala(p, (_p, i) => seen.push(i), { slices: 4, mirror: true });
+    // 4 folds, cada uno dibuja base + gemelo con el MISMO índice.
+    assert.deepEqual(seen, [0, 0, 1, 1, 2, 2, 3, 3]);
 });
