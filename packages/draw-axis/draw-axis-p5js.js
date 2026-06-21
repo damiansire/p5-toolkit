@@ -1,6 +1,6 @@
 // Pure coordinate generation, decoupled from drawing and from p5 globals so it
 // can be tested without a canvas.
-function gridPoints(width, height, step = 100) {
+function axisPoints(width, height, step = 100) {
     const points = [];
     for (let x = 0; x <= width; x += step) {
         points.push([x, 0]);
@@ -17,7 +17,7 @@ function drawAxis(p, step = 100) {
     p.line(0, 0, p.width, 0);
     p.line(0, 0, 0, p.height);
     // Tick labels along each axis — iterate the pure point list and draw.
-    for (const [x, y] of gridPoints(p.width, p.height, step)) {
+    for (const [x, y] of axisPoints(p.width, p.height, step)) {
         drawPoint(p, x, y);
     }
 }
@@ -33,4 +33,7 @@ function drawPoint(p, x, y) {
     p.pop();
 }
 
-module.exports = { drawAxis, drawPoint, gridPoints };
+// `gridPoints` is kept as a backward-compatible alias for `axisPoints`.
+const gridPoints = axisPoints;
+
+module.exports = { drawAxis, drawPoint, axisPoints, gridPoints };

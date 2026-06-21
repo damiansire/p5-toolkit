@@ -60,7 +60,7 @@ Draws a single point at `(x, y)` and labels it with its coordinates.
 - `p` — a p5 instance.
 - `x`, `y` — point coordinates.
 
-### `gridPoints(width, height, step = 100)`
+### `axisPoints(width, height, step = 100)`
 
 Pure function (no p5 needed). Returns the list of points used by `drawAxis`:
 points along the X axis from `0` to `width`, and along the Y axis from `step` to
@@ -69,11 +69,14 @@ points along the X axis from `0` to `width`, and along the Y axis from `step` to
 - Returns `Array<[x, y]>`.
 
 ```js
-const { gridPoints } = require("draw-axis-p5js");
+const { axisPoints } = require("draw-axis-p5js");
 
-gridPoints(200, 200, 100);
+axisPoints(200, 200, 100);
 // => [[0, 0], [100, 0], [200, 0], [0, 100], [0, 200]]
 ```
+
+> Also exported as `gridPoints`, a deprecated alias kept for backward
+> compatibility. Prefer `axisPoints` — these are axis points, not a grid.
 
 ## License
 
