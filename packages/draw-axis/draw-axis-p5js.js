@@ -23,10 +23,14 @@ function drawAxis(p, step = 100) {
 }
 
 function drawPoint(p, x, y) {
+    p.push();
     p.strokeWeight(8);
     p.point(x, y);
+    p.noStroke();
+    p.fill(0);
     p.textSize(15);
     p.text(`(${x},${y})`, x, y + 18);
+    p.pop();
 }
 
 module.exports = { drawAxis, drawPoint, gridPoints };
