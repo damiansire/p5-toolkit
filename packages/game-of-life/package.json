@@ -1,0 +1,54 @@
+{
+  "name": "game-of-life-p5js",
+  "version": "1.0.0",
+  "description": "Conway's Game of Life and B/S cellular automata for p5.js",
+  "main": "game-of-life-p5js.js",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "require": "./game-of-life-p5js.js",
+      "default": "./game-of-life-p5js.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "game-of-life-p5js.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test",
+    "prepublishOnly": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damiansire/p5-toolkit.git",
+    "directory": "packages/game-of-life"
+  },
+  "keywords": [
+    "p5js",
+    "p5.js",
+    "game-of-life",
+    "conway",
+    "cellular-automata",
+    "automata",
+    "generative",
+    "creative-coding",
+    "processing"
+  ],
+  "author": "Damian Sire <damiansire@hotmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "p5": "^1.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/damiansire/p5-toolkit/issues"
+  },
+  "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/game-of-life#readme"
+}
