@@ -49,7 +49,8 @@ drawAxis(p, 50); // a labeled point every 50px
 Draws the X axis (horizontal) and Y axis (vertical) through the origin `(0, 0)`,
 then a labeled point along each axis every `step` pixels.
 
-- `p` — a p5 instance (or the global `p5` object in global mode).
+- `p` — a p5 instance (or `window` in global mode, e.g. `drawAxis(window)`,
+  since global mode binds the p5 methods to the window).
 - `step` — pixel spacing between labeled points. Default `100`.
 
 ### `drawPoint(p, x, y)`
