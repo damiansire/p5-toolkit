@@ -20,8 +20,10 @@ function harmonyOffsets(harmony, count = 5) {
             return [0, 180];
         case "analogous": {
             // Spread `count` swatches symmetrically around the base, 30° apart.
+            // No Math.floor: with an even count the swatches straddle the base
+            // (e.g. count=4 -> [-45, -15, 15, 45]) instead of skewing toward +hue.
             const step = 30;
-            const start = -step * Math.floor((count - 1) / 2);
+            const start = (-step * (count - 1)) / 2;
             return Array.from({ length: count }, (_, i) => start + i * step);
         }
         case "triadic":
@@ -34,7 +36,7 @@ function harmonyOffsets(harmony, count = 5) {
             // Same hue; the lightness ramp in `palette` does the variation.
             return Array.from({ length: count }, () => 0);
         default:
-            throw new RangeError(`armonía desconocida: "${harmony}"`);
+            throw new RangeError(`unknown harmony: "${harmony}"`);
     }
 }
 
@@ -61,7 +63,14 @@ function palette(baseHue, harmony = "analogous", opts = {}) {
 // does); injecting it keeps tests reproducible. Picks a random base hue, then
 // reuses a harmony so the result still looks intentional, not muddy.
 function randomPalette(randomFn = Math.random, opts = {}) {
-    const harmonies = ["analogous", "triadic", "complementary", "splitComplementary"];
+    const harmonies = [
+        "analogous",
+        "triadic",
+        "complementary",
+        "splitComplementary",
+        "tetradic",
+        "monochromatic",
+    ];
     const harmony = harmonies[Math.floor(randomFn() * harmonies.length)];
     const baseHue = Math.floor(randomFn() * 360);
     return palette(baseHue, harmony, opts);
