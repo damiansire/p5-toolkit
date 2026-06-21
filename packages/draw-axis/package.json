@@ -28,6 +28,9 @@
   ],
   "author": "Damian Sire <damiansire@hotmail.com>",
   "license": "MIT",
+  "peerDependencies": {
+    "p5": "^1.0.0"
+  },
   "bugs": {
     "url": "https://github.com/damiansire/p5-toolkit/issues"
   },
