@@ -42,9 +42,12 @@ inflate the monorepo):
 
 ```bash
 npm ci
+npm run lint                           # eslint over the whole monorepo
+npm run format:check                   # prettier --check (formatting gate)
 npm test --workspaces --if-present     # run every package's tests
 npm pack --workspaces --dry-run        # validate the publishable tarballs
 ```
 
-CI (`.github/workflows/ci.yml`) runs the test + build matrix (Node 18/20/22) and
-a `npm pack` dry-run on every push and pull request.
+CI (`.github/workflows/ci.yml`) runs four blocking jobs on every push and pull
+request: `lint` (eslint), `format` (`prettier --check`), the `test` + build
+matrix (Node 18/20/22), and a `npm pack` dry-run.
