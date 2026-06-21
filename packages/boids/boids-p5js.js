@@ -128,7 +128,7 @@ function computeSteering(boid, boids, opts = {}, neighbours = boids) {
 // so every boid that can influence another always lands in an adjacent cell.
 function buildSpatialGrid(boids, cellSize) {
     const grid = new Map();
-    const key = (cx, cy) => cx + "," + cy;
+    const key = (cx, cy) => cx + ',' + cy;
     for (const b of boids) {
         const cx = Math.floor(b.pos.x / cellSize);
         const cy = Math.floor(b.pos.y / cellSize);
@@ -165,13 +165,7 @@ function neighboursOf(boid, { grid, cellSize, key }) {
 // Returns a fresh array of boids (the input flock is not mutated). Uses a
 // spatial-hash grid so the per-tick cost is ~O(n) instead of O(n²).
 function flock(boids, opts = {}) {
-    const {
-        maxSpeed = 4,
-        width = 800,
-        height = 600,
-        perception = 50,
-        separationDist = 25,
-    } = opts;
+    const { maxSpeed = 4, width = 800, height = 600, perception = 50, separationDist = 25 } = opts;
     // Cell = the largest radius any rule reads, so neighbours never fall outside
     // the 3×3 block we query. Guard against a non-positive size.
     const cellSize = Math.max(1, perception, separationDist);

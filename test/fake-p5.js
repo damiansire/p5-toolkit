@@ -7,24 +7,24 @@
 // dependency. The packages stay independent.
 
 const RECORDED = [
-    "push",
-    "pop",
-    "line",
-    "rect",
-    "point",
-    "text",
-    "fill",
-    "stroke",
-    "strokeWeight",
-    "noStroke",
-    "noFill",
-    "textSize",
-    "translate",
-    "rotate",
-    "scale",
-    "triangle",
-    "circle",
-    "color",
+    'push',
+    'pop',
+    'line',
+    'rect',
+    'point',
+    'text',
+    'fill',
+    'stroke',
+    'strokeWeight',
+    'noStroke',
+    'noFill',
+    'textSize',
+    'translate',
+    'rotate',
+    'scale',
+    'triangle',
+    'circle',
+    'color',
 ];
 
 const STYLE_METHODS = /^(stroke|fill|strokeWeight|noStroke|noFill|textSize)$/;
@@ -54,21 +54,21 @@ function fakeP5({ width = 200, height = 200 } = {}) {
         },
         // True when every push has a matching pop and we never popped too far.
         balanced() {
-            return depth === 0 && minDepth === 0 && p.count("push") === p.count("pop");
+            return depth === 0 && minDepth === 0 && p.count('push') === p.count('pop');
         },
     };
 
     for (const name of RECORDED) {
         p[name] =
-            name === "color"
+            name === 'color'
                 ? // `color` returns a value the sketch keeps; model it as an {r,g,b} tag.
                   (r, g, b) => {
-                      calls.push(["color", r, g, b]);
+                      calls.push(['color', r, g, b]);
                       return { r, g, b };
                   }
                 : (...args) => {
-                      if (name === "push") depth++;
-                      else if (name === "pop") {
+                      if (name === 'push') depth++;
+                      else if (name === 'pop') {
                           depth--;
                           if (depth < minDepth) minDepth = depth;
                       } else if (STYLE_METHODS.test(name) && depth === 0) {

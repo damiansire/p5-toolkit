@@ -24,17 +24,17 @@ npm install p5
 ## Usage (instance mode)
 
 ```js
-const p5 = require("p5");
-const { generate, drawLSystem, PRESETS } = require("l-system-p5js");
+const p5 = require('p5');
+const { generate, drawLSystem, PRESETS } = require('l-system-p5js');
 
 new p5((p) => {
-  p.setup = () => {
-    p.createCanvas(600, 600);
-    p.background(255);
-    p.translate(p.width / 2, p.height); // grow up from the bottom-center
-    const segments = generate(PRESETS.plant, 5, { length: 6 });
-    drawLSystem(p, segments);
-  };
+    p.setup = () => {
+        p.createCanvas(600, 600);
+        p.background(255);
+        p.translate(p.width / 2, p.height); // grow up from the bottom-center
+        const segments = generate(PRESETS.plant, 5, { length: 6 });
+        drawLSystem(p, segments);
+    };
 });
 ```
 
@@ -42,14 +42,14 @@ new p5((p) => {
 
 `turtleSegments` understands the classic L-system alphabet:
 
-| Symbol | Meaning |
-|---|---|
-| `F`, `G` | move forward, drawing a segment |
-| `f` | move forward without drawing |
-| `+` | turn left by `angle` |
-| `-` | turn right by `angle` |
-| `[` | push the current position + heading |
-| `]` | pop the saved state (branch back) |
+| Symbol   | Meaning                             |
+| -------- | ----------------------------------- |
+| `F`, `G` | move forward, drawing a segment     |
+| `f`      | move forward without drawing        |
+| `+`      | turn left by `angle`                |
+| `-`      | turn right by `angle`               |
+| `[`      | push the current position + heading |
+| `]`      | pop the saved state (branch back)   |
 
 Any other symbol is a no-op for drawing, so you can use letters like `X` purely
 to drive the rewriting.
@@ -83,9 +83,9 @@ Ready-to-use specs: `plant`, `kochCurve`, `sierpinski`, `dragon`. Each is a
   Returns `Array<[x1, y1, x2, y2]>`.
 
 ```js
-const { expand } = require("l-system-p5js");
+const { expand } = require('l-system-p5js');
 
-expand("F", { F: "F+F-F-F+F" }, 1);
+expand('F', { F: 'F+F-F-F+F' }, 1);
 // => "F+F-F-F+F"
 ```
 

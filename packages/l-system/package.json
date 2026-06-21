@@ -1,56 +1,56 @@
 {
-  "name": "l-system-p5js",
-  "version": "1.0.0",
-  "description": "L-systems and turtle-graphics fractal plants for p5.js",
-  "main": "l-system-p5js.js",
-  "type": "commonjs",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "require": "./l-system-p5js.js",
-      "default": "./l-system-p5js.js"
+    "name": "l-system-p5js",
+    "version": "1.0.0",
+    "description": "L-systems and turtle-graphics fractal plants for p5.js",
+    "main": "l-system-p5js.js",
+    "type": "commonjs",
+    "sideEffects": false,
+    "exports": {
+        ".": {
+            "require": "./l-system-p5js.js",
+            "default": "./l-system-p5js.js"
+        },
+        "./package.json": "./package.json"
     },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "l-system-p5js.js",
-    "README.md",
-    "LICENSE"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "scripts": {
-    "test": "node --test",
-    "prepublishOnly": "node --test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/damiansire/p5-toolkit.git",
-    "directory": "packages/l-system"
-  },
-  "keywords": [
-    "p5js",
-    "p5.js",
-    "l-system",
-    "lindenmayer",
-    "fractal",
-    "turtle-graphics",
-    "generative",
-    "creative-coding",
-    "processing"
-  ],
-  "author": "Damian Sire <damiansire@gmail.com>",
-  "license": "MIT",
-  "peerDependencies": {
-    "p5": "^1.0.0"
-  },
-  "bugs": {
-    "url": "https://github.com/damiansire/p5-toolkit/issues"
-  },
-  "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/l-system#readme"
+    "files": [
+        "l-system-p5js.js",
+        "README.md",
+        "LICENSE"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "scripts": {
+        "test": "node --test",
+        "prepublishOnly": "node --test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/damiansire/p5-toolkit.git",
+        "directory": "packages/l-system"
+    },
+    "keywords": [
+        "p5js",
+        "p5.js",
+        "l-system",
+        "lindenmayer",
+        "fractal",
+        "turtle-graphics",
+        "generative",
+        "creative-coding",
+        "processing"
+    ],
+    "author": "Damian Sire <damiansire@gmail.com>",
+    "license": "MIT",
+    "peerDependencies": {
+        "p5": "^1.0.0"
+    },
+    "bugs": {
+        "url": "https://github.com/damiansire/p5-toolkit/issues"
+    },
+    "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/l-system#readme"
 }

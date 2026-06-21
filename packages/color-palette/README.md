@@ -24,21 +24,21 @@ npm install p5
 ## Usage (instance mode)
 
 ```js
-const p5 = require("p5");
-const { palette, applyPalette } = require("color-palette-p5js");
+const p5 = require('p5');
+const { palette, applyPalette } = require('color-palette-p5js');
 
 new p5((p) => {
-  p.setup = () => {
-    p.createCanvas(500, 500);
-    // A triadic palette around hue 210 (a cool blue), as p5.Color objects.
-    const colors = applyPalette(p, palette(210, "triadic", { count: 3 }));
-    p.background(colors[0]);
-    p.fill(colors[1]);
-    p.noStroke();
-    p.circle(250, 250, 200);
-    p.fill(colors[2]);
-    p.circle(250, 250, 100);
-  };
+    p.setup = () => {
+        p.createCanvas(500, 500);
+        // A triadic palette around hue 210 (a cool blue), as p5.Color objects.
+        const colors = applyPalette(p, palette(210, 'triadic', { count: 3 }));
+        p.background(colors[0]);
+        p.fill(colors[1]);
+        p.noStroke();
+        p.circle(250, 250, 200);
+        p.fill(colors[2]);
+        p.circle(250, 250, 100);
+    };
 });
 ```
 
@@ -46,7 +46,7 @@ Reroll a fresh palette on demand, sharing p5's RNG so a `randomSeed` makes it
 reproducible:
 
 ```js
-const { randomPalette, drawPalette } = require("color-palette-p5js");
+const { randomPalette, drawPalette } = require('color-palette-p5js');
 
 const pal = randomPalette(() => p.random());
 drawPalette(p, pal); // preview the swatches as a row across the canvas
@@ -85,9 +85,9 @@ Draws the palette as a row of swatches (defaults to the full canvas width).
 - `wrapHue(hue)` — normalises a hue into `[0, 360)`.
 
 ```js
-const { palette, hslToRgb } = require("color-palette-p5js");
+const { palette, hslToRgb } = require('color-palette-p5js');
 
-hslToRgb(palette(0, "complementary")[1]); // the complement of red
+hslToRgb(palette(0, 'complementary')[1]); // the complement of red
 ```
 
 ## License

@@ -83,9 +83,11 @@ function ruleLookup(counts) {
 function parseRule(rulestring) {
     const match = /^B(\d*)\/S(\d*)$/i.exec(rulestring.trim());
     if (!match) {
-        throw new SyntaxError(`invalid rulestring: "${rulestring}" (expected something like "B3/S23")`);
+        throw new SyntaxError(
+            `invalid rulestring: "${rulestring}" (expected something like "B3/S23")`,
+        );
     }
-    const toDigits = (s) => s.split("").map(Number);
+    const toDigits = (s) => s.split('').map(Number);
     return { birth: toDigits(match[1]), survival: toDigits(match[2]) };
 }
 

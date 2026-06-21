@@ -24,31 +24,26 @@ npm install p5
 ## Usage (instance mode)
 
 ```js
-const p5 = require("p5");
-const { createBoid, flock, drawBoids } = require("boids-p5js");
+const p5 = require('p5');
+const { createBoid, flock, drawBoids } = require('boids-p5js');
 
 new p5((p) => {
-  let boids;
+    let boids;
 
-  p.setup = () => {
-    p.createCanvas(800, 600);
-    boids = Array.from({ length: 120 }, () =>
-      createBoid(
-        p.random(p.width),
-        p.random(p.height),
-        p.random(-2, 2),
-        p.random(-2, 2)
-      )
-    );
-  };
+    p.setup = () => {
+        p.createCanvas(800, 600);
+        boids = Array.from({ length: 120 }, () =>
+            createBoid(p.random(p.width), p.random(p.height), p.random(-2, 2), p.random(-2, 2)),
+        );
+    };
 
-  p.draw = () => {
-    p.background(10);
-    p.fill(220);
-    p.noStroke();
-    boids = flock(boids, { width: p.width, height: p.height, maxSpeed: 4 });
-    drawBoids(p, boids);
-  };
+    p.draw = () => {
+        p.background(10);
+        p.fill(220);
+        p.noStroke();
+        boids = flock(boids, { width: p.width, height: p.height, maxSpeed: 4 });
+        drawBoids(p, boids);
+    };
 });
 ```
 
@@ -56,13 +51,13 @@ Tune the flock with the rule weights:
 
 ```js
 boids = flock(boids, {
-  width: p.width,
-  height: p.height,
-  perception: 60,        // neighbour radius for alignment + cohesion
-  separationDist: 30,    // personal space
-  separationWeight: 2,   // dial each rule up/down
-  alignmentWeight: 1,
-  cohesionWeight: 0.8,
+    width: p.width,
+    height: p.height,
+    perception: 60, // neighbour radius for alignment + cohesion
+    separationDist: 30, // personal space
+    separationWeight: 2, // dial each rule up/down
+    alignmentWeight: 1,
+    cohesionWeight: 0.8,
 });
 ```
 
@@ -94,7 +89,7 @@ Draws each boid as a triangle pointing along its velocity.
   one boid. Returns a `{ x, y }` vector.
 
 ```js
-const { createBoid, computeSteering } = require("boids-p5js");
+const { createBoid, computeSteering } = require('boids-p5js');
 
 const a = createBoid(0, 0);
 const b = createBoid(5, 0); // very close

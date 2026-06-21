@@ -16,9 +16,9 @@ function wrapHue(hue) {
 // hue. `count` only matters for harmonies that fan out (analogous).
 function harmonyOffsets(harmony, count = 5) {
     switch (harmony) {
-        case "complementary":
+        case 'complementary':
             return [0, 180];
-        case "analogous": {
+        case 'analogous': {
             // Spread `count` swatches symmetrically around the base, 30° apart.
             // No Math.floor: with an even count the swatches straddle the base
             // (e.g. count=4 -> [-45, -15, 15, 45]) instead of skewing toward +hue.
@@ -26,13 +26,13 @@ function harmonyOffsets(harmony, count = 5) {
             const start = (-step * (count - 1)) / 2;
             return Array.from({ length: count }, (_, i) => start + i * step);
         }
-        case "triadic":
+        case 'triadic':
             return [0, 120, 240];
-        case "tetradic":
+        case 'tetradic':
             return [0, 90, 180, 270];
-        case "splitComplementary":
+        case 'splitComplementary':
             return [0, 150, 210];
-        case "monochromatic":
+        case 'monochromatic':
             // Same hue; the lightness ramp in `palette` does the variation.
             return Array.from({ length: count }, () => 0);
         default:
@@ -43,7 +43,7 @@ function harmonyOffsets(harmony, count = 5) {
 // Builds a palette from a base hue and a harmony. Saturation is fixed and
 // lightness ramps across the swatches so even a single-hue (monochromatic)
 // palette has visible variety.
-function palette(baseHue, harmony = "analogous", opts = {}) {
+function palette(baseHue, harmony = 'analogous', opts = {}) {
     const { count = 5, saturation = 70, lightness = 55, lightnessRange = 30 } = opts;
     const offsets = harmonyOffsets(harmony, count);
     const n = offsets.length;
@@ -64,12 +64,12 @@ function palette(baseHue, harmony = "analogous", opts = {}) {
 // reuses a harmony so the result still looks intentional, not muddy.
 function randomPalette(randomFn = Math.random, opts = {}) {
     const harmonies = [
-        "analogous",
-        "triadic",
-        "complementary",
-        "splitComplementary",
-        "tetradic",
-        "monochromatic",
+        'analogous',
+        'triadic',
+        'complementary',
+        'splitComplementary',
+        'tetradic',
+        'monochromatic',
     ];
     const harmony = harmonies[Math.floor(randomFn() * harmonies.length)];
     const baseHue = Math.floor(randomFn() * 360);
