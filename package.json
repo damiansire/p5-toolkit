@@ -4,5 +4,9 @@
   "description": "Creative-coding utilities for p5.js, organized as an npm-workspaces monorepo. Each utility is published to npm under its own name.",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "test": "npm test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  }
 }
