@@ -28,14 +28,15 @@ const p5 = require("p5");
 const { buildFlowField, stepParticle } = require("flow-field-p5js");
 
 new p5((p) => {
-  const resolution = 20;
-  let angles;
+  let field;
   let particles;
 
   p.setup = () => {
     p.createCanvas(600, 600);
     p.background(10);
-    angles = buildFlowField(p, resolution, { noiseScale: 0.08, turns: 1 });
+    // `field` carries its own resolution/width/height, so stepParticle never
+    // needs you to repeat them.
+    field = buildFlowField(p, 20, { noiseScale: 0.08, turns: 1 });
     particles = Array.from({ length: 800 }, () => ({
       x: p.random(p.width),
       y: p.random(p.height),
@@ -45,12 +46,7 @@ new p5((p) => {
   p.draw = () => {
     p.stroke(255, 12);
     for (let i = 0; i < particles.length; i++) {
-      const next = stepParticle(particles[i], angles, {
-        resolution,
-        width: p.width,
-        height: p.height,
-        speed: 1.5,
-      });
+      const next = stepParticle(particles[i], field, { speed: 1.5 });
       p.line(particles[i].x, particles[i].y, next.x, next.y);
       particles[i] = next;
     }
@@ -63,8 +59,8 @@ To preview the raw field while tuning it, draw the angle grid directly:
 ```js
 const { buildFlowField, drawFlowField } = require("flow-field-p5js");
 
-const angles = buildFlowField(p, 20, { noiseScale: 0.08, turns: 2 });
-drawFlowField(p, angles, 20);
+const field = buildFlowField(p, 20, { noiseScale: 0.08, turns: 2 });
+drawFlowField(p, field);
 ```
 
 ## API
@@ -72,25 +68,31 @@ drawFlowField(p, angles, 20);
 ### `buildFlowField(p, resolution = 20, opts = {})`
 
 Samples `p.noise` over the canvas to build the angle grid sized to fit
-`p.width × p.height` in cells of `resolution` pixels.
+`p.width × p.height` in cells of `resolution` pixels. Returns a **field object**
+`{ angles, resolution, width, height }` — pass it straight to `stepParticle` /
+`drawFlowField` and the cell size travels with the data, so producer and
+consumer can never disagree about `resolution`.
 
 - `opts.noiseScale` — how fast the noise input advances per cell. Default `0.1`.
 - `opts.turns` — how many full turns the angle sweeps across the noise range.
   Default `1`.
 
-### `stepParticle(particle, angles, opts)`
+### `stepParticle(particle, field, opts = {})`
 
 Advances one `{ x, y }` particle a single step along the field and wraps it
-around the canvas edges (a torus). Returns a fresh `{ x, y }`.
+around the canvas edges (a torus). Returns a fresh `{ x, y }`. `field` is a field
+object from `buildFlowField` (it supplies `resolution`/`width`/`height`), or a
+bare angle grid plus `opts.resolution`/`opts.width`/`opts.height`.
 
-- `opts.resolution` — cell size, must match the field's.
-- `opts.width`, `opts.height` — canvas size used for wrapping.
 - `opts.speed` — pixels per step. Default `1`.
+- `opts.resolution`, `opts.width`, `opts.height` — only needed when `field` is a
+  bare angle grid rather than a field object.
 
-### `drawFlowField(p, angles, resolution = 20, length = null)`
+### `drawFlowField(p, field, resolution = 20, length = null)`
 
-Draws the field as a grid of short line segments. `length` defaults to
-`resolution * 0.8`.
+Draws the field as a grid of short line segments. `field` may be a field object
+(its `resolution` is used) or a bare angle grid plus the `resolution` argument.
+`length` defaults to `resolution * 0.8`.
 
 ### Pure helpers (no p5 needed)
 

@@ -4,6 +4,7 @@
   "description": "Perlin-noise flow field and particle advection for p5.js",
   "main": "flow-field-p5js.js",
   "type": "commonjs",
+  "sideEffects": false,
   "exports": {
     ".": {
       "require": "./flow-field-p5js.js",
@@ -17,7 +18,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "engines": {
     "node": ">=18"

@@ -19,7 +19,7 @@ function flowFieldAngles(cols, rows, noiseFn, opts = {}) {
     // cols/rows <= 0 would produce an empty field and silently draw nothing,
     // which hides bugs in the caller. Reject the degenerate input instead.
     if (!(cols > 0) || !(rows > 0)) {
-        throw new RangeError(`cols y rows deben ser > 0, se recibió ${cols}×${rows}`);
+        throw new RangeError(`cols and rows must be > 0, received ${cols}×${rows}`);
     }
     const { noiseScale = 0.1, turns = 1 } = opts;
     const angles = [];
@@ -33,50 +33,82 @@ function flowFieldAngles(cols, rows, noiseFn, opts = {}) {
     return angles;
 }
 
+// A flow field bundles the angle grid with the `resolution` it was baked at, so
+// the producer (`buildFlowField`) and the consumers (`angleAt`/`stepParticle`/
+// `drawFlowField`) can't silently disagree about the cell size. `angleAt` and
+// friends accept either a field object or a bare `number[][]` for backward
+// compatibility; this normalises both shapes.
+function asField(fieldOrAngles, resolution) {
+    if (Array.isArray(fieldOrAngles)) {
+        return { angles: fieldOrAngles, resolution };
+    }
+    // A field object carries its own resolution — ignore the loose argument.
+    return fieldOrAngles;
+}
+
+// Canonical toroidal wrap: folds a coordinate back into [0, size). `size <= 0`
+// has no torus to wrap onto and `% 0` is NaN, so the value is returned
+// untouched. (This idiom is duplicated verbatim in boids-p5js.js — the packages
+// stay independent on purpose, so each keeps its own copy.)
+function wrap(v, size) {
+    if (!(size > 0)) return v;
+    return ((v % size) + size) % size;
+}
+
 // Reads the flow angle at the cell that contains pixel `(px, py)`. The lookup
 // floors to the cell and clamps to the edges so a particle that drifts a hair
-// past the border still gets a valid angle instead of `undefined`.
-function angleAt(angles, px, py, resolution) {
+// past the border still gets a valid angle instead of `undefined`. `field` may
+// be a field object (`{ angles, resolution }`) or a bare angle grid plus a
+// loose `resolution`.
+function angleAt(field, px, py, resolution) {
+    const { angles, resolution: res } = asField(field, resolution);
     const rows = angles.length;
     const cols = rows > 0 ? angles[0].length : 0;
-    const col = Math.min(cols - 1, Math.max(0, Math.floor(px / resolution)));
-    const row = Math.min(rows - 1, Math.max(0, Math.floor(py / resolution)));
+    const col = Math.min(cols - 1, Math.max(0, Math.floor(px / res)));
+    const row = Math.min(rows - 1, Math.max(0, Math.floor(py / res)));
     return angles[row][col];
 }
 
 // Advances one particle a single step along the field and wraps it around the
 // canvas edges (a torus), so a particle never escapes and the trails fill the
-// frame. Returns a fresh particle; the caller keeps the trail history.
-function stepParticle(particle, angles, opts) {
-    const { resolution, width, height, speed = 1 } = opts;
-    const angle = angleAt(angles, particle.x, particle.y, resolution);
-    let x = particle.x + Math.cos(angle) * speed;
-    let y = particle.y + Math.sin(angle) * speed;
-    // Wrap with a double-mod so negative coordinates land back in [0, size).
-    x = ((x % width) + width) % width;
-    y = ((y % height) + height) % height;
+// frame. Returns a fresh particle; the caller keeps the trail history. `field`
+// may be a field object (carrying its own resolution/width/height) or a bare
+// angle grid, in which case the geometry comes from `opts`.
+function stepParticle(particle, field, opts = {}) {
+    const f = asField(field, opts.resolution);
+    const resolution = f.resolution ?? opts.resolution;
+    const width = f.width ?? opts.width;
+    const height = f.height ?? opts.height;
+    const { speed = 1 } = opts;
+    const angle = angleAt(f.angles, particle.x, particle.y, resolution);
+    const x = wrap(particle.x + Math.cos(angle) * speed, width);
+    const y = wrap(particle.y + Math.sin(angle) * speed, height);
     return { x, y };
 }
 
 // Drives the field with p5's own noise so the look matches the rest of a
 // sketch. Builds the angle grid sized to the canvas and the requested cell
-// `resolution`.
+// `resolution`, and returns a field object `{ angles, resolution, width,
+// height }` so downstream calls never need the caller to repeat `resolution`.
 function buildFlowField(p, resolution = 20, opts = {}) {
     const cols = Math.max(1, Math.floor(p.width / resolution));
     const rows = Math.max(1, Math.floor(p.height / resolution));
-    return flowFieldAngles(cols, rows, (nx, ny) => p.noise(nx, ny), opts);
+    const angles = flowFieldAngles(cols, rows, (nx, ny) => p.noise(nx, ny), opts);
+    return { angles, resolution, width: p.width, height: p.height };
 }
 
 // Draws the field as a grid of short line segments — handy while tuning
-// `noiseScale`/`turns` before committing to particles.
-function drawFlowField(p, angles, resolution = 20, length = null) {
-    const len = length == null ? resolution * 0.8 : length;
+// `noiseScale`/`turns` before committing to particles. `field` may be a field
+// object or a bare angle grid plus a loose `resolution`.
+function drawFlowField(p, field, resolution = 20, length = null) {
+    const { angles, resolution: res } = asField(field, resolution);
+    const len = length == null ? res * 0.8 : length;
     p.push();
     for (let row = 0; row < angles.length; row++) {
         for (let col = 0; col < angles[row].length; col++) {
             const a = angles[row][col];
-            const x = col * resolution + resolution / 2;
-            const y = row * resolution + resolution / 2;
+            const x = col * res + res / 2;
+            const y = row * res + res / 2;
             p.line(x, y, x + Math.cos(a) * len, y + Math.sin(a) * len);
         }
     }

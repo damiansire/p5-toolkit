@@ -1,10 +1,13 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { fakeP5 } = require("../../test/fake-p5.js");
 const {
     noiseToAngle,
     flowFieldAngles,
     angleAt,
     stepParticle,
+    buildFlowField,
+    drawFlowField,
 } = require("./flow-field-p5js.js");
 
 test("noiseToAngle mapea [0,1] a una vuelta completa", () => {
@@ -71,4 +74,45 @@ test("stepParticle envuelve la partícula en los bordes (toro)", () => {
     });
     // 0 - 5 = -5 envuelve a 95.
     assert.ok(Math.abs(next.x - 95) < 1e-9);
+});
+
+test("buildFlowField devuelve un field con su resolution y la grilla", () => {
+    const p = fakeP5({ width: 100, height: 60 });
+    p.noise = () => 0.25; // ángulo determinista
+    const field = buildFlowField(p, 20);
+    assert.equal(field.resolution, 20);
+    assert.equal(field.width, 100);
+    assert.equal(field.height, 60);
+    assert.equal(field.angles.length, 3); // 60/20
+    assert.equal(field.angles[0].length, 5); // 100/20
+});
+
+test("buildFlowField con resolution > width clampa a una grilla 1x1 sin lanzar", () => {
+    const p = fakeP5({ width: 10, height: 10 });
+    p.noise = () => 0.5;
+    let field;
+    assert.doesNotThrow(() => {
+        field = buildFlowField(p, 100); // resolution > width/height
+    });
+    assert.equal(field.angles.length, 1);
+    assert.equal(field.angles[0].length, 1);
+});
+
+test("stepParticle toma resolution/width/height del field sin repetirlos", () => {
+    const p = fakeP5({ width: 100, height: 100 });
+    p.noise = () => 0; // ángulo 0 -> se mueve sobre +X
+    const field = buildFlowField(p, 50);
+    const next = stepParticle({ x: 10, y: 10 }, field, { speed: 3 });
+    assert.ok(Math.abs(next.x - 13) < 1e-9);
+    assert.ok(Math.abs(next.y - 10) < 1e-9);
+});
+
+test("drawFlowField balancea push/pop y acepta el field object", () => {
+    const p = fakeP5({ width: 40, height: 40 });
+    p.noise = () => 0.5;
+    const field = buildFlowField(p, 20);
+    drawFlowField(p, field);
+    assert.ok(p.balanced());
+    // 2x2 celdas -> 4 segmentos.
+    assert.equal(p.count("line"), 4);
 });
