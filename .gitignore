@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Test / coverage output
+coverage/
+
+# Build output
+dist/
+
+# Packaged tarballs
+*.tgz
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
