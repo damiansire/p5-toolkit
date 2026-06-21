@@ -1,0 +1,55 @@
+{
+  "name": "color-palette-p5js",
+  "version": "1.0.0",
+  "description": "Generative color palettes from color-theory harmonies for p5.js",
+  "main": "color-palette-p5js.js",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "require": "./color-palette-p5js.js",
+      "default": "./color-palette-p5js.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "color-palette-p5js.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test",
+    "prepublishOnly": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damiansire/p5-toolkit.git",
+    "directory": "packages/color-palette"
+  },
+  "keywords": [
+    "p5js",
+    "p5.js",
+    "color",
+    "palette",
+    "color-theory",
+    "harmony",
+    "hsl",
+    "generative",
+    "creative-coding",
+    "processing"
+  ],
+  "author": "Damian Sire <damiansire@hotmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "p5": "^1.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/damiansire/p5-toolkit/issues"
+  },
+  "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/color-palette#readme"
+}

@@ -1,0 +1,54 @@
+{
+  "name": "flow-field-p5js",
+  "version": "1.0.0",
+  "description": "Perlin-noise flow field and particle advection for p5.js",
+  "main": "flow-field-p5js.js",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "require": "./flow-field-p5js.js",
+      "default": "./flow-field-p5js.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "flow-field-p5js.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test",
+    "prepublishOnly": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damiansire/p5-toolkit.git",
+    "directory": "packages/flow-field"
+  },
+  "keywords": [
+    "p5js",
+    "p5.js",
+    "flow-field",
+    "perlin",
+    "noise",
+    "particles",
+    "generative",
+    "creative-coding",
+    "processing"
+  ],
+  "author": "Damian Sire <damiansire@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "p5": "^1.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/damiansire/p5-toolkit/issues"
+  },
+  "homepage": "https://github.com/damiansire/p5-toolkit/tree/main/packages/flow-field#readme"
+}
