@@ -2,6 +2,17 @@
 
 Creative-coding utilities for [p5.js](https://p5js.org/), organized as an npm-workspaces monorepo. Each package is published to npm under its own name, but they evolve together here.
 
+## Showcase
+
+[`showcase/`](showcase) is a live gallery: every package rendered as an interactive
+p5.js sketch on one page (boids flocking, a flow field, Game of Life, a spinning
+mandala, an L-system plant, drifting palettes and plotting axes). Sketches are
+instantiated lazily and paused off-screen.
+
+```bash
+cd showcase && npm install && npm run dev
+```
+
 ## Packages
 
 | Package                                   | npm                                                     | What it does                                      |
