@@ -1,17 +1,20 @@
 # p5-toolkit
 
-Creative-coding utilities for [p5.js](https://p5js.org/), organized as an npm-workspaces monorepo. Each package is published to npm under its own name, but they evolve together here.
+Creative-coding utilities for [p5.js](https://p5js.org/), organized as an npm-workspaces monorepo. Each package lives here under its own name and evolves alongside the others; `draw-axis` is published to npm today, and the rest are built and tested in the monorepo, ready to publish as they stabilise.
 
-[![p5-toolkit showcase: boids, a flow field, Game of Life, a mandala, a drifting colour palette, an L-system plant and plotting axes — each a live p5.js sketch](docs/showcase.png)](showcase)
+[![p5-toolkit showcase: boids, a flow field, Game of Life, a mandala, a drifting colour palette, an L-system plant and plotting axes — each a live p5.js sketch](docs/showcase.png)](https://damiansire.github.io/p5-toolkit/)
 
-<p align="center"><em>Every package, rendered live in the <a href="showcase">showcase</a> gallery — boids, flow fields, Game of Life, mandalas, colour palettes, L-systems and plotting axes.</em></p>
+<p align="center"><em>Every package, rendered live in the <a href="https://damiansire.github.io/p5-toolkit/">showcase</a> gallery — boids, flow fields, Game of Life, mandalas, colour palettes, L-systems and plotting axes.</em></p>
 
 ## Showcase
 
-[`showcase/`](showcase) is a live gallery: every package rendered as an interactive
-p5.js sketch on one page (boids flocking, a flow field, Game of Life, a spinning
-mandala, an L-system plant, drifting palettes and plotting axes). Sketches are
-instantiated lazily and paused off-screen.
+**Live demo: <https://damiansire.github.io/p5-toolkit/>** — every package rendered as
+an interactive p5.js sketch on one page (boids flocking, a flow field, Game of Life, a
+spinning mandala, an L-system plant, drifting palettes and plotting axes). Sketches are
+instantiated lazily and paused off-screen. The source lives in [`showcase/`](showcase)
+and deploys to GitHub Pages on every push (`.github/workflows/pages.yml`).
+
+Run it locally:
 
 ```bash
 cd showcase && npm install && npm run dev
@@ -19,15 +22,19 @@ cd showcase && npm install && npm run dev
 
 ## Packages
 
-| Package                                   | npm                                                     | What it does                                      |
-| ----------------------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
-| [`draw-axis`](packages/draw-axis)         | [npm](https://www.npmjs.com/package/draw-axis-p5js)     | Draw coordinate axes in p5.js sketches.           |
-| [`flow-field`](packages/flow-field)       | [npm](https://www.npmjs.com/package/flow-field-p5js)    | Perlin-noise flow fields + particle advection.    |
-| [`l-system`](packages/l-system)           | [npm](https://www.npmjs.com/package/l-system-p5js)      | L-systems and turtle-graphics fractal plants.     |
-| [`game-of-life`](packages/game-of-life)   | [npm](https://www.npmjs.com/package/game-of-life-p5js)  | Conway's Game of Life and B/S cellular automata.  |
-| [`boids`](packages/boids)                 | [npm](https://www.npmjs.com/package/boids-p5js)         | Boids flocking (separation, alignment, cohesion). |
-| [`color-palette`](packages/color-palette) | [npm](https://www.npmjs.com/package/color-palette-p5js) | Generative palettes from color-theory harmonies.  |
-| [`mandala`](packages/mandala)             | [npm](https://www.npmjs.com/package/mandala-p5js)       | Radial-symmetry mandala / kaleidoscope patterns.  |
+Only `draw-axis` is published to npm so far. The other six are fully built and tested
+in this monorepo and will get their own npm packages as they stabilise — until then,
+use them from source (the "Package" column links to each one's code and README).
+
+| Package                                   | npm                                                              | What it does                                      |
+| ----------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------- |
+| [`draw-axis`](packages/draw-axis)         | [`draw-axis-p5js`](https://www.npmjs.com/package/draw-axis-p5js) | Draw coordinate axes in p5.js sketches.           |
+| [`flow-field`](packages/flow-field)       | _not yet published_                                              | Perlin-noise flow fields + particle advection.    |
+| [`l-system`](packages/l-system)           | _not yet published_                                              | L-systems and turtle-graphics fractal plants.     |
+| [`game-of-life`](packages/game-of-life)   | _not yet published_                                              | Conway's Game of Life and B/S cellular automata.  |
+| [`boids`](packages/boids)                 | _not yet published_                                              | Boids flocking (separation, alignment, cohesion). |
+| [`color-palette`](packages/color-palette) | _not yet published_                                              | Generative palettes from color-theory harmonies.  |
+| [`mandala`](packages/mandala)             | _not yet published_                                              | Radial-symmetry mandala / kaleidoscope patterns.  |
 
 ## Conventions
 
@@ -43,8 +50,9 @@ Every package follows the same shape so they stay easy to publish and maintain:
 
 ## Roadmap
 
-`draw-axis` was the first published utility; a family of generative-art modules
-(flow fields, L-systems, cellular automata, boids, palettes, mandalas) followed.
+`draw-axis` was the first utility and is the only one published to npm so far; a
+family of generative-art modules (flow fields, L-systems, cellular automata, boids,
+palettes, mandalas) followed in the monorepo and will be published as they stabilise.
 Candidate additions (only when each is genuinely useful and tested, not to
 inflate the monorepo):
 

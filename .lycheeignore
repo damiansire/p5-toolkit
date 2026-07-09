@@ -1,0 +1,13 @@
+# Lychee ignore list (URL regexes). Keep this lean — the point of the link
+# checker is to catch real rot, so only exclude sources that produce known
+# false positives in CI.
+
+# npm's web UI (npmjs.com/package/...) returns HTTP 403 to automated clients
+# because of bot protection, which is a false positive in CI. Whether a package
+# actually exists is validated by the CI `npm pack --workspaces --dry-run` job
+# and by the npm registry, not by scraping the website.
+https://www\.npmjs\.com/
+
+# Local dev servers referenced in quickstart snippets.
+^https?://localhost
+^https?://127\.0\.0\.1

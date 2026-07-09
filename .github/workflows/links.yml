@@ -1,0 +1,49 @@
+name: Links
+
+# Guards against README/badge/link rot: every doc link that this repo advertises
+# must resolve. Runs on doc changes, on PRs, and weekly to catch external rot.
+on:
+    push:
+        branches: [main]
+        paths:
+            - '**/*.md'
+            - '.lycheeignore'
+            - '.github/workflows/links.yml'
+    pull_request:
+        paths:
+            - '**/*.md'
+            - '.lycheeignore'
+            - '.github/workflows/links.yml'
+    schedule:
+        - cron: '0 6 * * 1' # Mondays 06:00 UTC
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    linkChecker:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Check links in Markdown docs
+              uses: lycheeverse/lychee-action@v2
+              with:
+                  # Only the reader-facing docs; internal audit reports are excluded
+                  # in .lycheeignore. Fragments/anchors are not checked by default.
+                  args: >-
+                      --no-progress
+                      --cache
+                      --max-cache-age 1d
+                      --exclude-loopback
+                      --
+                      './README.md'
+                      './packages/**/README.md'
+                      './showcase/README.md'
+                  # Fail the job on a dead link so drift is caught, not just logged.
+                  fail: true
+                  jobSummary: true
