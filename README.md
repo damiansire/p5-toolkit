@@ -2,6 +2,10 @@
 
 Creative-coding utilities for [p5.js](https://p5js.org/), organized as an npm-workspaces monorepo. Each package is published to npm under its own name, but they evolve together here.
 
+[![p5-toolkit showcase: boids, a flow field, Game of Life, a mandala, a drifting colour palette, an L-system plant and plotting axes — each a live p5.js sketch](docs/showcase.png)](showcase)
+
+<p align="center"><em>Every package, rendered live in the <a href="showcase">showcase</a> gallery — boids, flow fields, Game of Life, mandalas, colour palettes, L-systems and plotting axes.</em></p>
+
 ## Showcase
 
 [`showcase/`](showcase) is a live gallery: every package rendered as an interactive
