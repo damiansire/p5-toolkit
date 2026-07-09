@@ -28,10 +28,12 @@ jobs:
           node-version: 20
       # The showcase is self-contained: it bundles the packages from source
       # (Vite aliases) and only needs its own deps (Vite + p5).
+      # This repo does not commit lockfiles (see .git/info/exclude), so install
+      # rather than ci.
       - name: Build the showcase
         working-directory: showcase
         run: |
-          npm ci
+          npm install
           npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
