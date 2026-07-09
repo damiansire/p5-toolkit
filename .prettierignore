@@ -11,3 +11,6 @@ AUDITORIA.md
 
 # Local tooling
 .claude/
+
+# Lychee link-checker ignore list (no prettier parser).
+.lycheeignore
