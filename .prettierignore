@@ -1,9 +1,5 @@
-node_modules/
+_audit/
+_audits/
 dist/
 coverage/
-*.tgz
-package-lock.json
-
-# Audit artefacts — not product source.
-_audit/
-AUDITORIA.md
+.claude/
