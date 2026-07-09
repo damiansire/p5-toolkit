@@ -1,18 +1,18 @@
 {
-  "name": "p5-toolkit-showcase",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "description": "Live gallery for the p5-toolkit packages: each package rendered as an interactive p5.js sketch.",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "p5": "^1.11.0"
-  },
-  "devDependencies": {
-    "vite": "^5.4.10"
-  }
+    "name": "p5-toolkit-showcase",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Live gallery for the p5-toolkit packages: each package rendered as an interactive p5.js sketch.",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "p5": "^1.11.0"
+    },
+    "devDependencies": {
+        "vite": "^5.4.10"
+    }
 }
