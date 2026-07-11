@@ -96,6 +96,19 @@ const b = createBoid(5, 0); // very close
 computeSteering(a, [a, b]).x; // < 0  (a steers away from b)
 ```
 
+## Performance
+
+`flock()` uses a spatial-hash grid so each boid only scans nearby cells
+instead of the whole flock, but that stays sub-quadratic only while cell
+occupancy is bounded (on a fixed-size canvas, occupancy grows with the boid
+count). Real measured numbers (1k / 5k / 10k boids) and the architectural
+reasoning (why it's not O(n) at scale, and how to keep it fast) are in
+[`docs/benchmarks.md`](../../docs/benchmarks.md). Run it yourself with:
+
+```bash
+node packages/boids/benchmark.js
+```
+
 ## License
 
 MIT © Damian Sire

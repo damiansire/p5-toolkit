@@ -37,8 +37,8 @@ use them from source (the "Package" column links to each one's code and README).
 | [`mandala`](packages/mandala)             | _not yet published_                                              | Radial-symmetry mandala / kaleidoscope patterns.  |
 
 > **Known drift:** the published `draw-axis-p5js@1.0.0` on npm is a stale,
-> pre-rewrite build — global p5-mode functions, no `module.exports`, no
-> instance-mode `p` parameter — and does not match the current source in
+> pre-rewrite build (global p5-mode functions, no `module.exports`, no
+> instance-mode `p` parameter) and does not match the current source in
 > `packages/draw-axis`. The showcase therefore still imports `draw-axis`
 > from source like the other six, not from npm, until the package is
 > republished. Republishing is a real `npm publish` and only happens on
@@ -55,6 +55,9 @@ Every package follows the same shape so they stay easy to publish and maintain:
   source, README and LICENSE.
 - Pure, p5-free logic split out into testable functions, covered by
   `node --test` (no canvas needed).
+
+Performance at scale (measured, not assumed) is covered for `boids` (the
+package where it matters most) in [`docs/benchmarks.md`](docs/benchmarks.md).
 
 ## Roadmap
 
