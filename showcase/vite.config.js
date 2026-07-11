@@ -15,7 +15,7 @@ const here = (rel) => fileURLToPath(new URL(rel, import.meta.url));
 // the showcase at the real npm package would break the build or force a
 // feature regression, so it stays aliased to source like the rest until the
 // package is republished with the current implementation (a real `npm
-// publish`, out of scope here — see README "Estado de publicación").
+// publish`, out of scope here, see README "Estado de publicación").
 export default defineConfig({
     base: './',
     resolve: {
