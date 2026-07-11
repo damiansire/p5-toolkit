@@ -6,6 +6,16 @@ const here = (rel) => fileURLToPath(new URL(rel, import.meta.url));
 // The packages are single-file CommonJS modules; alias each name to its source
 // file so the showcase consumes the working tree directly (and sidesteps the
 // repo's stale node_modules workspace symlinks). p5 resolves from node_modules.
+//
+// draw-axis-p5js is the one package actually published to npm, but the
+// published artifact (v1.0.0) is a stale, pre-rewrite implementation: global
+// p5-mode functions, no `module.exports`, no instance-mode `p` parameter. It
+// cannot satisfy `import { drawAxis } from 'draw-axis-p5js'` at all (nothing
+// is exported), let alone the `drawAxis(p)` call this showcase makes. Pointing
+// the showcase at the real npm package would break the build or force a
+// feature regression, so it stays aliased to source like the rest until the
+// package is republished with the current implementation (a real `npm
+// publish`, out of scope here — see README "Estado de publicación").
 export default defineConfig({
     base: './',
     resolve: {

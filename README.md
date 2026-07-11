@@ -36,6 +36,14 @@ use them from source (the "Package" column links to each one's code and README).
 | [`color-palette`](packages/color-palette) | _not yet published_                                              | Generative palettes from color-theory harmonies.  |
 | [`mandala`](packages/mandala)             | _not yet published_                                              | Radial-symmetry mandala / kaleidoscope patterns.  |
 
+> **Known drift:** the published `draw-axis-p5js@1.0.0` on npm is a stale,
+> pre-rewrite build — global p5-mode functions, no `module.exports`, no
+> instance-mode `p` parameter — and does not match the current source in
+> `packages/draw-axis`. The showcase therefore still imports `draw-axis`
+> from source like the other six, not from npm, until the package is
+> republished. Republishing is a real `npm publish` and only happens on
+> explicit request.
+
 ## Conventions
 
 Every package follows the same shape so they stay easy to publish and maintain:
