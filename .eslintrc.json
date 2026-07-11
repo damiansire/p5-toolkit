@@ -8,5 +8,34 @@
     "parserOptions": {
         "ecmaVersion": 2022,
         "sourceType": "commonjs"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["**/*.ts"],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "sourceType": "module",
+                "project": ["./packages/*/tsconfig.json"]
+            },
+            "plugins": ["@typescript-eslint"],
+            "extends": [
+                "eslint:recommended",
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@typescript-eslint/recommended-requiring-type-checking"
+            ],
+            "rules": {
+                "no-undef": "off"
+            }
+        },
+        {
+            "files": ["**/*.test.ts"],
+            "rules": {
+                // node:test's `test()` returns a promise that settles when
+                // the run finishes; the runner (not the call site) awaits
+                // it, so flagging every top-level `test(...)` call here is a
+                // false positive specific to this test style.
+                "@typescript-eslint/no-floating-promises": "off"
+            }
+        }
+    ]
 }

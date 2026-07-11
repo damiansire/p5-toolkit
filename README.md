@@ -59,6 +59,28 @@ Every package follows the same shape so they stay easy to publish and maintain:
 Performance at scale (measured, not assumed) is covered for `boids` (the
 package where it matters most) in [`docs/benchmarks.md`](docs/benchmarks.md).
 
+## TypeScript migration
+
+**Status: 1 of 7 packages migrated (`draw-axis`).** This is a large migration
+(each package needs real typing, a build step and updated `exports`/`files`,
+not just renaming `.js` to `.ts`), so it's being done incrementally instead of
+all at once with `any` sprinkled in to fake completeness.
+
+`draw-axis` went first because it's the smallest package (49 lines) and the
+only one already published to npm, so it's the cheapest place to prove the
+whole toolchain end to end (per-package `tsconfig.json` extending a shared
+`tsconfig.base.json`, `tsc` build to `dist/` with `.d.ts` output, ESLint via
+`@typescript-eslint` with type-checked rules, `node --test` against the
+compiled output) before rolling it out further. It ships strict types with no
+`any`, a `P5Like` interface for the p5 surface it actually uses (not the full
+`p5` type), and its tests migrated to TypeScript too. `npm run build`,
+`npm run lint`, `npm run format:check` and `npm test` all stay green.
+
+The other six (`boids`, `color-palette`, `flow-field`, `game-of-life`,
+`l-system`, `mandala`) are still plain JS. Smallest-first is the plan for
+finishing the rollout, so the next candidates are `mandala` (112 lines) and
+`game-of-life` (116 lines); `boids` (201 lines, the largest) is last.
+
 ## Roadmap
 
 `draw-axis` was the first utility and is the only one published to npm so far; a

@@ -6,6 +6,10 @@ The drawing functions take a p5 instance as their first argument, so the package
 works in **instance mode** (and global mode too). Coordinate generation is a pure
 function, decoupled from p5, so it can be used and tested without a canvas.
 
+Written in **TypeScript**, ships its own `.d.ts` types (no `@types/` package
+needed), and exports the `P5Like` interface it types `p` against, in case you
+want to type your own draw helpers against the same minimal p5 surface.
+
 ## Installation
 
 ```bash
@@ -40,6 +44,12 @@ To change the spacing between labeled points, pass a `step`:
 
 ```js
 drawAxis(p, 50); // a labeled point every 50px
+```
+
+TypeScript consumers get full types on import, no setup needed:
+
+```ts
+import { drawAxis, axisPoints, type P5Like, type AxisPoint } from 'draw-axis-p5js';
 ```
 
 ## API

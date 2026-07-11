@@ -1,17 +1,26 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const { gridPoints, drawAxis } = require('./draw-axis-p5js.js');
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { gridPoints, drawAxis, type P5Like } from './draw-axis-p5js.js';
 
 // Minimal fake p5: records the calls a draw helper makes so we can assert
 // push/pop balance and that no global style leaks outside a push/pop pair.
-function fakeP5({ width = 200, height = 100 } = {}) {
-    const calls = [];
+type RecordedCall = [name: string, ...args: unknown[]];
+
+interface FakeP5 extends P5Like {
+    readonly calls: RecordedCall[];
+    readonly styleOutsidePush: string[];
+    readonly minDepth: number;
+    readonly depth: number;
+}
+
+function fakeP5({ width = 200, height = 100 } = {}): FakeP5 {
+    const calls: RecordedCall[] = [];
     let depth = 0;
     let minDepth = 0;
-    const styleOutsidePush = [];
+    const styleOutsidePush: string[] = [];
     const rec =
-        (name) =>
-        (...args) => {
+        (name: string) =>
+        (...args: unknown[]) => {
             if (name === 'push') depth++;
             else if (name === 'pop') {
                 depth--;
@@ -24,7 +33,24 @@ function fakeP5({ width = 200, height = 100 } = {}) {
             }
             calls.push([name, ...args]);
         };
-    const p = {
+
+    const methodNames = [
+        'push',
+        'pop',
+        'line',
+        'point',
+        'text',
+        'fill',
+        'strokeWeight',
+        'noStroke',
+        'textSize',
+    ] as const;
+    const methods = Object.fromEntries(methodNames.map((m) => [m, rec(m)])) as Pick<
+        FakeP5,
+        (typeof methodNames)[number]
+    >;
+
+    return {
         width,
         height,
         calls,
@@ -37,29 +63,8 @@ function fakeP5({ width = 200, height = 100 } = {}) {
         get depth() {
             return depth;
         },
+        ...methods,
     };
-    for (const m of [
-        'push',
-        'pop',
-        'line',
-        'rect',
-        'point',
-        'text',
-        'fill',
-        'stroke',
-        'strokeWeight',
-        'noStroke',
-        'noFill',
-        'textSize',
-        'translate',
-        'rotate',
-        'scale',
-        'triangle',
-        'circle',
-    ]) {
-        p[m] = rec(m);
-    }
-    return p;
 }
 
 test('step que divide exacto incluye el borde', () => {
