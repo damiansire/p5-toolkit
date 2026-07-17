@@ -1,6 +1,6 @@
 {
     "name": "draw-axis-p5js",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "package for drawing coordinate axes in p5.js",
     "main": "dist/draw-axis-p5js.js",
     "types": "dist/draw-axis-p5js.d.ts",
