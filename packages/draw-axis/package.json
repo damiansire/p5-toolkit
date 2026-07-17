@@ -29,8 +29,8 @@
     "scripts": {
         "build": "tsc -p .",
         "pretest": "tsc -p .",
-        "test": "node --test \"dist/*.test.js\"",
-        "prepublishOnly": "npm run build && node --test \"dist/*.test.js\""
+        "test": "node --test dist/draw-axis-p5js.test.js",
+        "prepublishOnly": "npm run build && node --test dist/draw-axis-p5js.test.js"
     },
     "repository": {
         "type": "git",
