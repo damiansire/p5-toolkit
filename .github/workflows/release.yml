@@ -13,6 +13,8 @@ on:
 permissions:
     contents: write
     pull-requests: write
+    # npm provenance (publishConfig.provenance en los 7 paquetes) exige OIDC
+    id-token: write
 
 jobs:
     release:
